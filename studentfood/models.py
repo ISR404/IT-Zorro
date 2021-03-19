@@ -18,6 +18,7 @@ class User(models.Model):
     name = models.CharField('Никнейм', max_length=10)
     photo = models.ImageField('Фото')
     email = models.EmailField('Почта')
+    # password = models.PasswordField
 
 
 class Comment(models.Model):
