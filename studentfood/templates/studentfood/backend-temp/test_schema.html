@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SFood</title>
+</head>
+<body>
+    {% if recipes_list %}
+    <ul>
+        {% for recipe in recipes_list %}
+            <li>
+                <a href="{{ recipe.id }}/">{{ recipe }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>Рецепты не найдены</p>
+    {% endif %}
+</body>
+</html>

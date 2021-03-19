@@ -6,11 +6,12 @@ from .models import Recipe, User, Comment
 # Create your views here.
 
 def index(request):
-    recipes_list = Recipe.objects.order_by('-pub_date')[:5]
-    output = ', '.join([r.recipe_name for r in recipes_list])
-    return HttpResponse(output)
+    recipes_list = Recipe.objects.order_by('-pub_date')
+    context = {'recipes_list': recipes_list}
+    return render(request, 'studentfood/backend-temp/test_schema.html', context)
 
 
 def detail(request, recipe_id):
-    response = "Вы открыли рецепт с индексом %s"
-    return HttpResponse(response % recipe_id)
+    recipe_detail = Recipe.objects.get(pk=recipe_id)
+    context = {'recipe_detail': recipe_detail}
+    return render(request, 'studentfood/backend-temp/detail_test.html', context)

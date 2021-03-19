@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ recipe_detail.recipe_name }}</title>
+</head>
+<body>
+    {% if recipe_detail %}
+        <p>{{ recipe_detail.description }}</p>
+    {% else %}
+        <p>Рецепт не найден!</p>
+    {% endif %}
+</body>
+</html>
