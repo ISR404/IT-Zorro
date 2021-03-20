@@ -12,7 +12,8 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.recipe_name
-
+    # не забыть добавить ценник для рецепта!
+    
 
 class User(models.Model):
     name = models.CharField('Никнейм', max_length=10)
