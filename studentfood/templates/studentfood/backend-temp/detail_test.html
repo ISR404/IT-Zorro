@@ -8,7 +8,7 @@
 <body>
     {% if recipe_detail %}
         <p>{{ recipe_detail.description }}</p>
-        <a href="{% url 'index' %}">Вернуться назад (тестим нежесткие урлы)</a>
+        <a href="{% url 'studentfood:index' %}">Вернуться назад (тестим нежесткие урлы)</a>
     {% else %}
         <p>Рецепт не найден!</p>
     {% endif %}
