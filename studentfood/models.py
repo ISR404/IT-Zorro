@@ -10,10 +10,27 @@ class Recipe(models.Model):
     pub_date = models.DateTimeField('Дата публикации')
     description = models.TextField('Описание')
     mark = 0
+    price = models.IntegerField('Примерная стоимость')
 
     def __str__(self):
         return self.recipe_name
     # не забыть добавить ценник для рецепта!
+
+
+class FirstRecipe(Recipe):
+    pass
+
+
+class SecondRecipe(Recipe):
+    pass
+
+
+class EasyRecipe(Recipe):
+    pass
+
+
+class DesertRecipe(Recipe):
+    pass
     
 
 class SiteUser(User):
