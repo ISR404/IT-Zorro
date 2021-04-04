@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -15,16 +16,13 @@ class Recipe(models.Model):
     # не забыть добавить ценник для рецепта!
     
 
-class User(models.Model):
-    name = models.CharField('Никнейм', max_length=10)
+class SiteUser(User):
     photo = models.ImageField('Фото')
-    email = models.EmailField('Почта')
-    # password = models.PasswordField
 
 
 class Comment(models.Model):
     text = models.TextField('Текст комментария')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(SiteUser, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
 
