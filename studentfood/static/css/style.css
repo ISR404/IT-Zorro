@@ -1,0 +1,81 @@
+#mainbody{
+    /*background-image: url("https://img1.akspic.ru/originals/2/0/6/1/6/161602-al_dente-salat_cezar-italyanskaya_kuhnya-listovoj_ovoshh-obed-1920x1080.jpg");*/
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+a {
+    text-decoration: none;
+}
+
+#search-form{
+    height: 50%;
+    weight: 50%;
+    color: darkkhaki;
+}
+
+#search-input{
+    height: 40px;
+    weight: 100px;
+}
+
+.category-div{
+    display: block;
+    background-color: red;
+    position: absolute;
+    left: 10%;
+}
+
+#cont{
+    color: blue;
+    left: 30%;
+}
+
+.tab-content{
+    position: absolute;
+    left: 30%;
+}
+
+#category{
+    margin: 5px 5px 5px 10px;
+    width: 200px;
+    float: left;
+    border: solid black 2px;
+    border-radius: 15px;
+    padding: 5px 5px 5px 5px;
+}
+
+#sort{
+    float: right;
+}
+
+#resepts{
+    position: absolute;
+    top: 30%;
+    left: 20%;
+    border: solid green 2px;
+    width: 100px;
+    padding: 5px 5px 5px 5px;
+    margin: 5px 5px 5px 10px;
+}
+
+.main_resepts{
+    display: flex;
+}
+
+span{
+    float: left;
+}
+
+.caption{
+    text-align: left;
+}
+
+.text-table{
+    width: 100px;
+}
+
+#tr-border{
+    border: solid yellow 2px;
+}
