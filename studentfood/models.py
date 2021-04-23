@@ -4,13 +4,6 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-global_category = [
-    'Первые блюда',
-    'Вторые блюда',
-    'Закуски/Салаты',
-    'Сладкое/Десерты'
-]
-
 # подписать поля
 
 
@@ -26,16 +19,30 @@ class Recipe(models.Model):  # рецепт
     recipe_name = models.CharField('Название', max_length=40)  # название рецепта
     pub_date = models.DateTimeField('Дата публикации')  # дата публикация
     description = models.TextField('Описание')  # описание рецепта
-    mark = 0  # оценка рецепта
+    avg_mark = 0  # оценка рецепта
+    count_of_submits = 0  # количество людей, поставивших оценку
     price = models.IntegerField('Примерная стоимость')
-    category = models.CharField('Категория', max_length=30)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    GLOBAL_CATEGORY = [
+        ('first', 'Первые блюда'),
+        ('second', 'Вторые блюда'),
+        ('snack', 'Закуски/Салаты'),
+        ('sweet', 'Сладкое/Десерты'),
+    ]
+    category = models.CharField('Категория', choices=GLOBAL_CATEGORY, max_length=16, blank=True)
 
     def __str__(self):  # при запросе класса выводит название рецепта
         return self.recipe_name
 
     def calculate_mark(self):  # реализовать оценку
         pass
+
+    def set_mark(self):  # проверить авторизацию пользователя
+
+        pass
+    # def leave_comment(self, text):
+        # user = User.objects.get()
+        # self.comment_set.create(text=text)
 
 
 class Comment(models.Model):
