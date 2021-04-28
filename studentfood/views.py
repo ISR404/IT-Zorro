@@ -17,12 +17,8 @@ def detail(request, recipe_id):  # объект (написать список �
     return render(request, 'studentfood/html/product.html', {'recipe_detail': recipe_detail})
 
 
-def register(request):  # реализация Димы
-    return render(request, 'profiles/register.html')
-
-
 def profile(request):  # пользовательские данные (при переходе возвращает объект пользователя)
-    return render(request, 'profiles/profile.html')
+    return render(request, 'studentfood/html/profiles/profile.html')
 
 
 def category_filter(request):
