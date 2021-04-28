@@ -2,39 +2,28 @@ from django.shortcuts import render, get_object_or_404
 # from django.http import HttpResponse
 from .models import Recipe, User, Comment
 from django.http import Http404
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
-from django.views import generic
-from django.http import HttpResponse
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login
-
 
 
 # Create your views here.
 
-def index(request):
+def main(request):  # лист рецептов,
     recipes_list = Recipe.objects.order_by('-pub_date')
     context = {'recipes_list': recipes_list}
-    return render(request, 'studentfood/backend-temp/test_schema.html', context)
+    return render(request, 'studentfood/html/main.html', context)
 
 
-def detail(request, recipe_id):
+def detail(request, recipe_id):  # объект (написать список полей)
     recipe_detail = get_object_or_404(Recipe, pk=recipe_id)
-    return render(request, 'studentfood/backend-temp/detail_test.html', {'recipe_detail': recipe_detail})
+    return render(request, 'studentfood/html/product.html', {'recipe_detail': recipe_detail})
 
-def mainpage(request):
-    return render(request, 'studentfood/main.html')
 
-def register(request):
+def register(request):  # реализация Димы
     return render(request, 'profiles/register.html')
 
-def authoriz(request):
-    return render(request, '')
 
-def product(request):
-    return render(request, 'studentfood/product.html')
-
-def profile(request):
+def profile(request):  # пользовательские данные (при переходе возвращает объект пользователя)
     return render(request, 'profiles/profile.html')
+
+
+def category_filter(request):
+    pass
