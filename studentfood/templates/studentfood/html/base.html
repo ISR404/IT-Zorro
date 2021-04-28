@@ -1,13 +1,14 @@
-{% load static %}
 {% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html>
 <head>
+    {% load static%}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
     <link href="{% static "css/base.css" %}" rel="stylesheet" type="text/css">
+    {% block stat %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
 </head>
 
@@ -46,7 +47,7 @@
                       <a href="{% url 'studentfood:profile' %}" class="image-profile">
                           <img src='../../static/images/kfc.jpg' width="50" height="50" alt="{{ user.username }}">
                       </a>
-                      <a class="nav-item nav-link" href="/logout"><img src='../../static/images/exit.png' width="35" height="35" alt="Выход"></a>
+                      <a class="nav-item nav-link" href="/logout" id="a-button"><img src='../../static/images/exit.png' width="35" height="35" alt="Выход"></a>
                 {% else %}
                     <a class="nav-item nav-link active" href="/login">Вход</a>
                     <a class="nav-item nav-link active" href="/reg">Регистрация</a>

@@ -2,6 +2,7 @@
 {% block title %}Профиль {{ user.username }}{% endblock %}
 {% block main %}
     <h1>Добро пожаловать, {{ user.username }}</h1>
+
     <a role="button" class="btn btn-danger" data-bs-toggle="button" href="{% url 'logout' %}">Выйти из профиля</a>
     <a role="button" class="btn btn-success" data-bs-toggle="button" href="{% url 'studentfood:main' %}">Главная страница</a>
 {% endblock %}
