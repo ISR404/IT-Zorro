@@ -45,11 +45,10 @@ def detail(request, recipe_id):  # объект (написать список �
                 post_comment.user = request.user
                 post_comment.save()
                 return render(request, 'studentfood/html/product.html', {'recipe_detail': recipe_detail,
-                                                             'comment_form': comment_form,
-                                                             'comment_list': comment_list})
+                                                                         'comment_form': comment_form,
+                                                                         'comment_list': comment_list})
 
     return render(request, 'studentfood/html/product.html', {'recipe_detail': recipe_detail,
-                                                             'comment_form': comment_form,
                                                              'comment_list': comment_list})
 
 
@@ -63,5 +62,3 @@ def profile(request):  # пользовательские данные (при �
 
 def category_filter(request):
     pass
-
-
