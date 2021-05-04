@@ -47,16 +47,9 @@
 
 
         {# Контейнер категории в.1#}
-        {% if latest_question_list %}
-            <ul>
-            {% for question in latest_question_list %}
-                <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
-                <span>999</span></li>
-            {% endfor %}
-            </ul>
-        {% else %}
-            <p>Категории отсутствуют</p>
-        {% endif %}
+        {% for cat in site_category %}
+            <p><a href="{% url 'studentfood:main'  %}"/>{{ cat }}</p>
+        {% endfor %}
 
         {# Контейнер категории в.2 #}
         <div class="row" id="category">
@@ -120,7 +113,7 @@
 
 
         {# Контейнер основной инфы #}
-        <div id="resepts">
+        {% comment %}<div id="resepts">
             <table width="70%" cellspacing="0" cellpadding="0">
                <tr>
                    <div id="tr-border">
@@ -145,6 +138,7 @@
                    </div>
                </tr>
               </table>
+            {% endcomment %}
 
             {# Разделение основной инфы от кнопок перехода #}
 
@@ -162,6 +156,12 @@
                     </li>
                   </ul>
                 </nav>
+            </div>
+
+            <div>
+                {% for comment in comment_list %}
+                    <p>{{ comment.text }}</p>
+                {% endfor %}
             </div>
         </div>
     </body>

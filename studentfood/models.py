@@ -8,7 +8,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    photo = models.ImageField('Фото')  # список всех полей есть в файле миграции.
+    photo = models.ImageField('Фото', null=True)  # список всех полей есть в файле миграции.
 
     def create_recipe(self, recipe_name, description, price, category):  # по идее параметры для функции должны браться
         #  из полей фронта, а потом на их основе выполняется функция создания и привязки рецепта к юзеру
@@ -30,6 +30,7 @@ class Recipe(models.Model):  # рецепт
         ('sweet', 'Сладкое/Десерты'),
     ]
     category = models.CharField('Категория', choices=GLOBAL_CATEGORY, max_length=16, blank=True)
+    photo = models.ImageField('Фото рецепта', null=True)  # доделать в плане обязательности
 
     def __str__(self):  # при запросе класса выводит название рецепта
         return self.recipe_name
@@ -46,9 +47,21 @@ class Recipe(models.Model):  # рецепт
 
 
 class Comment(models.Model):
-    text = models.TextField('Текст комментария')
+    text = models.CharField('Текст комментария', max_length=1500)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # связь комментария с пользователем
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)  # связь комментария с рецептом
+    pub_date = models.DateTimeField('Опубликовано', default=timezone.now)
 
+    """
+    def leave_comment(self):
+        com = Comment()
+        recipe = Recipe.objects.get(pk=...)
+        user = User.objects.get(...)  # request во view
+        text = 'some text'
+        com.recipe = recipe
+        com.user = user
+        com.text = text  # на будущее
+        com.save()
+    """
 
 
