@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
-
+from django.utils import timezone
 from .models import Recipe, User, Comment
 from django.http import Http404
-from .forms import CommentForm
+from .forms import CommentForm, RecipeForm
 
 
 # Create your views here.
@@ -60,5 +60,28 @@ def profile(request):  # пользовательские данные (при �
     return render(request, 'profiles/profile.html')
 
 
-def category_filter(request):
-    pass
+def create_recipe(request):
+    if request.user.is_authenticated:
+        if request.method == 'GET':
+            recipe_form = RecipeForm()
+            recipe_form.user = request.user
+            return render(request, 'studentfood/backend-temp/test_recipe_create.html', {'recipe_form': recipe_form,
+                                                                                        'request': request})
+        if request.method == 'POST':
+            recipe_form = RecipeForm(request.POST)
+            post_recipe = Recipe()
+            if recipe_form.is_valid():
+                post_recipe.recipe_name = recipe_form.cleaned_data.get("recipe_name")
+                post_recipe.description = recipe_form.cleaned_data.get("description")
+                post_recipe.price = recipe_form.cleaned_data.get("price")
+                post_recipe.user = request.user
+                post_recipe.category = recipe_form.cleaned_data.get("category")
+                post_recipe.save()
+                return render(request, 'studentfood/backend-temp/test_recipe_create.html')
+            else:
+                return HttpResponse('Ваша форма недействительна!')
+    else:
+        return HttpResponse('Сначала нужно авторизироваться!')
+
+
+

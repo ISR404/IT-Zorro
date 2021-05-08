@@ -6,6 +6,6 @@ urlpatterns = [
     path('catalog/', views.main, name='main'),
     path('detail/<int:recipe_id>', views.detail, name='detail'),
     path('register/', views.register, name='register'),
-    # path('product', views.product, name='product'),
+    path('create_recipe/', views.create_recipe, name='create_recipe'),
     path('profile/', views.profile, name='profile'),
 ]

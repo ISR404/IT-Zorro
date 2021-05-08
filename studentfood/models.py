@@ -17,11 +17,11 @@ class User(AbstractUser):
 
 class Recipe(models.Model):  # рецепт
     recipe_name = models.CharField('Название', max_length=40)  # название рецепта
-    pub_date = models.DateTimeField('Дата публикации')  # дата публикация
+    pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)  # дата публикация
     description = models.TextField('Описание')  # описание рецепта
     avg_mark = 0  # оценка рецепта
     count_of_submits = 0  # количество людей, поставивших оценку
-    price = models.IntegerField('Примерная стоимость')
+    price = models.IntegerField('Примерная стоимость', null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     GLOBAL_CATEGORY = [
         ('first', 'Первые блюда'),
@@ -30,7 +30,7 @@ class Recipe(models.Model):  # рецепт
         ('sweet', 'Сладкое/Десерты'),
     ]
     category = models.CharField('Категория', choices=GLOBAL_CATEGORY, max_length=16, blank=True)
-    photo = models.ImageField('Фото рецепта', null=True)  # доделать в плане обязательности
+    photo = models.ImageField('Фото рецепта', null=True, blank=True)
 
     def __str__(self):  # при запросе класса выводит название рецепта
         return self.recipe_name
