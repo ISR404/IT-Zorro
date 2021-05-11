@@ -2,6 +2,7 @@
 {% block stat%}
     <link href="{% static "css/list_recipes.css" %}" rel="stylesheet" type="text/css">
 {% endblock %}
+
 {% block title %}Рецепты для студентов{% endblock %}
 
 {% block main %}
@@ -17,18 +18,19 @@
                 </div>
             </div>
 
+
                 <!-- Список рецептов-->
-            <div class="col-8" id="list-recipes">
+            <div class="col-9" id="list-recipes">
                 {% if recipes_list.count > 0 %}
                     {% for content in recipes_list %}
                         {% comment %}{% if selected == content.category %}{% endcomment %}
                         <div class="price-line">
                         <div class="product-image">
-                          <a href="{% url 'studentfood:detail' content.id%}"><img src="../../static/images/kfc.jpg" width="100" height="100" alt="Где KFC?"></a>
+                          <a href="{% url 'studentfood:detail' content.id%}"><img src="../../static/images/kfc.jpg" width="100" height="100" alt="../../static/images/kfc.jpg"></a>
                         </div>
                         <div class="product-content">
-                          <div class="product-title"><a>{{ content.recipe_name }}</a></div>
-                          <div class="product-description"><a>{{ content.description }}</a></div>
+                          <div class="product-title"><a href="{% url 'studentfood:detail' content.id%}">{{ content.recipe_name }}</a></div>
+                          <div class="product-description"><a href="{% url 'studentfood:detail' content.id%}">{{ content.description }}</a></div>
                           <div class="price-box"><span>Цена: {{ content.price }} рублей</span></div>
                           <div class="star-rating">&nbsp;</div>
                         </div>
@@ -38,6 +40,7 @@
                     </ol>
                 {% endif %}
             </div>
+
 
                 <!-- Пустое место справа-->
             <div class="col">

@@ -11,14 +11,10 @@ def main(request): # лист рецептов,
     null_recipe = Recipe()
     raw_category = null_recipe.GLOBAL_CATEGORY
     site_category = []
-    first = Recipe.objects.filter(category='Первые блюда')
-    second = Recipe.objects.filter(category='Вторые блюда')
     for elem in raw_category:
         site_category.append(elem[1])
     context = {'recipes_list': recipes_list,
                'site_category': site_category,
-               'first': first,
-               'second': second
               }
     return render(request, 'studentfood/html/main.html', context)
 
@@ -29,7 +25,10 @@ def detail(request, recipe_id):  # объект (написать список �
 
 
 def profile(request):  # пользовательские данные (при переходе возвращает объект пользователя)
-    return render(request, 'studentfood/html/profiles/profile.html')
+    recipes_list = Recipe.objects.order_by()
+    context = {'recipes_list': recipes_list,
+              }
+    return render(request, 'studentfood/html/profiles/profile.html', context)
 
 
 def category_filter(request):
