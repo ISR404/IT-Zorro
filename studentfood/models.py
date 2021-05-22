@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-# подписать поля
+# подписать поля return render_to_response('template_name', message='Ошибка добавления рецептов')
 
 
 class User(AbstractUser):
@@ -47,10 +47,13 @@ class Recipe(models.Model):  # рецепт
 
 
 class Comment(models.Model):
-    text = models.CharField('Текст комментария', max_length=1500)
+    text = models.TextField('Текст комментария', max_length=1500)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # связь комментария с пользователем
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)  # связь комментария с рецептом
     pub_date = models.DateTimeField('Опубликовано', default=timezone.now)
+
+    # def __str__(self):
+    #     return 'Comment by {} on {}'.format(self.name, self.post)
 
     """
     def leave_comment(self):

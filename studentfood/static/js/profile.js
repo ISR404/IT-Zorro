@@ -13,3 +13,11 @@ bootstrap.Tab.getInstance(triggerEl).show() // Select tab by name
 
 var triggerFirstTabEl = document.querySelector('#myTab li:first-child a')
 bootstrap.Tab.getInstance(triggerFirstTabEl).show() // Select first tab
+
+
+var alertList = document.querySelectorAll('.alert')
+alertList.forEach(function (alert) {
+  new bootstrap.Alert(alert)
+})
+
+alert('{{ message }}');

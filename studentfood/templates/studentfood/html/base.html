@@ -34,8 +34,7 @@
         </div>
 
         <!-- Кпопка выпадающего списка -->
-        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -46,7 +45,7 @@
                 <!-- <a class="nav-item nav-link" href="/">О нас</a> -->
                 {% if request.user.is_authenticated %}
                       <a href="{% url 'studentfood:profile' %}" class="image-profile">
-                          <img src='../../static/images/kfc.jpg' width="50" height="50" alt="{{ user.username }}">
+                          <img src='../../static/images/kfc.jpg' width="50" height="50" class="rounded-circle" alt="{{ user.username }}">
                       </a>
                       <a class="nav-item nav-link" href="/logout" id="a-button"><img src='../../static/images/exit.png' width="35" height="35" alt="Выход"></a>
                 {% else %}

@@ -1,5 +1,9 @@
-{% extends 'studentfood/html/base.html' %}
+{% extends 'studentfood/html/base.html' %}{% load static%}
+{% load crispy_forms_tags %}
 {% block title %}Рецепты для студентов{% endblock %}
+{% block stat%}
+    <link href="{% static "css/product.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
 
 {% block main %}
     <div class="container-fluid">
@@ -20,7 +24,34 @@
 
             <div class="col-8">
                 <h1>Рейтинг</h1>
-                <p>Комментарии</p>
+                <br>
+                <div class="row">
+                    <p>
+                        <strong>Комментарии:</strong>
+                        <span>{{ comments_count }}</span>
+                    </p>
+                    {% for comment in comment_list %}
+                            <div>
+                                <p><strong>{{ comment.user }}</strong> | Опубликовано: {{ comment.pub_date|date:"d-m-Y H:i" }}</p>
+                                <p>{{ comment.text }}</p>
+                            </div>
+                        {% empty %}
+                            <p>Нет комментариев. Будь первым!</p>
+                    {% endfor %}
+
+                    {% if request.user.is_authenticated %}
+                                {% if post_comment %}
+                                    <h2>Ваш комментарий добавлен!</h2>
+                                {% else %}
+                                    <h2>Добавить комментарий</h2>
+                                    <form action="." method="post">
+                                        {% csrf_token %}
+                                        {{ comment_form.as_p }}
+                                        <p><input type="submit" value="Отправить"></p>
+                                    </form>
+                                {% endif %}
+                    {% endif %}
+                </div>
             </div>
 
             <div class="col-2"></div>

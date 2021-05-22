@@ -14,7 +14,7 @@
                     <img src="../../static/images/kfc.jpg" width="200" height="200" alt="../../static/images/kfc.jpg">
                     <h2 align="center">{{ user.username }}</h2>
                 </div>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Добавить рецепт</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" id="addbutton">Добавить рецепт</button>
 
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
@@ -23,22 +23,27 @@
                         <h5 class="modal-title" id="exampleModalLabel">Добавить рецепт</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
-                      <div class="modal-body">
-                        <form>
-                          <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Название рецепта</label>
-                            <input type="text" class="form-control" id="recipient-name">
-                          </div>
-                          <div class="mb-3">
-                            <label for="message-text" class="col-form-label">Описание рецепта</label>
-                            <textarea class="form-control" id="message-text"></textarea>
-                          </div>
+                        <form action="" method="post">
+                            <div class="modal-body">
+                                {% csrf_token %}
+                                {% comment %}
+                                    <p><input id="recipe_form" type="text" name="recipe_name" value=""></p>
+                                    <p><input id="recipe_form" type="text" name="description" value=""></p>
+                                    <p><select>
+                                        <option disabled>Выберите категорию</option>
+                                        {% for cat in recipe_form.category %}
+                                            <option id="recipe_form" value="{{ cat }}" name="category"></option>
+                                        {% endfor %}
+                                    </select></p>
+                                    <p><input id="recipe_form" type="text" name="price" value=""></p>
+                                    {% endcomment %}
+                                    {{ recipe_form.as_p }}
+                              </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Добавить рецепт</button>
+                                <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Закрыть</button>
+                            </div>
                         </form>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                        <button type="button" class="btn btn-primary">Добавить рецепт</button>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -91,7 +96,7 @@
 
                     <!-- Вкладка "Избранные рецепты" -->
                   <div class="tab-pane fade" id="favorite" role="tabpanel" aria-labelledby="favorite-tab">
-                      Избранные рецепты
+                      <h1>Избранные рецепты</h1>
                   </div>
 
 
@@ -104,10 +109,9 @@
                   </div>
                 </div>
 
-                <div>
-                    <a role="button" class="btn btn-danger" data-bs-toggle="button" href="{% url 'logout' %}">Выйти из профиля</a>
-                    <a role="button" class="btn btn-success" data-bs-toggle="button" href="{% url 'studentfood:main' %}">Главная страница</a>
-                </div>
+                <a role="button" class="btn btn-danger" data-bs-toggle="button" href="{% url 'logout' %}">Выйти из профиля</a>
+                <a role="button" class="btn btn-success" data-bs-toggle="button" href="{% url 'studentfood:main' %}">Главная страница</a>
+
             </div>
 
 
