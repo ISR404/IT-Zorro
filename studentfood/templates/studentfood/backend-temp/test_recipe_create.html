@@ -5,7 +5,7 @@
     <title>Создание рецепта...</title>
 </head>
 <body>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% comment %}
         <p><input id="recipe_form" type="text" name="recipe_name" value=""></p>

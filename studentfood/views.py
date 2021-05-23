@@ -31,7 +31,7 @@ def main(request, use_filter=''):  # лист рецептов,
 
 def detail(request, recipe_id):  # объект (написать список полей)
     recipe_detail = get_object_or_404(Recipe, pk=recipe_id)
-    comment_list = Comment.objects.order_by('pub_date')
+    comment_list = recipe_detail.comment_set.order_by('pub_date')
     if request.user.is_authenticated:
         if request.method == 'GET':
             comment_form = CommentForm()
@@ -68,9 +68,11 @@ def create_recipe(request):
             return render(request, 'studentfood/backend-temp/test_recipe_create.html', {'recipe_form': recipe_form,
                                                                                         'request': request})
         if request.method == 'POST':
-            recipe_form = RecipeForm(request.POST)
+            recipe_form = RecipeForm(request.POST, request.FILES)
             post_recipe = Recipe()
             if recipe_form.is_valid():
+                if 'photo' in request.FILES:  # проверка на то, есть ли в реквесте фотки
+                    post_recipe.photo = request.FILES['photo']  # если есть, то присваиваем сохраняемому рецепту
                 post_recipe.recipe_name = recipe_form.cleaned_data.get("recipe_name")
                 post_recipe.description = recipe_form.cleaned_data.get("description")
                 post_recipe.price = recipe_form.cleaned_data.get("price")
