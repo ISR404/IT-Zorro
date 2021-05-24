@@ -10,13 +10,13 @@
     <div class="container-fluid">
         <div class="row">
                 <!-- Категории -->
-            <div class="col" id="category-list">
+            <form action="{% url 'studentfood:main' %}" class="col" id="category-list">
                 <div class="list-group">
                     {% for cat in site_category %}
-                        <a>{{ cat }}</a>
+                        <input type="submit" value="{{ cat }}" name="category_button">
                     {% endfor %}
                 </div>
-            </div>
+            </form>
 
 
                 <!-- Список рецептов-->

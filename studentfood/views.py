@@ -10,18 +10,25 @@ from django.db.models import Q
 
 # Create your views here.
 
-def main(request): # лист рецептов
+def main(request):  # лист рецептов
     search_query = request.GET.get('search', '')
-    if search_query:
-        recipes_list = Recipe.objects.filter(
-            Q(recipe_name__icontains=search_query) | Q(description__icontains=search_query))
-    else:
-        recipes_list = Recipe.objects.order_by('-pub_date')
+    category_query = request.GET.get('category_button', '')
     null_recipe = Recipe()
     raw_category = null_recipe.GLOBAL_CATEGORY
     site_category = []
     for elem in raw_category:
         site_category.append(elem[1])
+    if search_query:
+        recipes_list = Recipe.objects.filter(
+            Q(recipe_name__icontains=search_query) | Q(description__icontains=search_query))
+    elif category_query:
+        for raw in raw_category:
+            if category_query == raw[1]:
+                recipes_list = Recipe.objects.filter(Q(category__exact=raw[0]))
+    else:
+        recipes_list = Recipe.objects.order_by('-pub_date')
+
+
 
     paginator = Paginator(recipes_list, 3)
     page = request.GET.get('page')
