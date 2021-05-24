@@ -1,0 +1,22 @@
+{% extends 'studentfood/html/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Рецепты от Валерчика{% endblock %}
+
+{% block main %}
+    {% block content %}
+    <div class="container-fluid jumbotron">
+        <div class="row">
+            <div class='col-sm-6 col-sm-offset-3'>
+                <!--h3>{{ title }}</h3><-->
+                <hr/>
+                <form method='POST' action='' enctype='multipart/form_data'> {% csrf_token %}
+                    {{ form|crispy }}
+                    {% csrf_token %}
+                    <input class="description" type='submit' value='{{ title }}'/>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+{% endblock %}
