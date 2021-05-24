@@ -5,12 +5,18 @@ from django.http import Http404
 from .forms import CommentForm, RecipeForm
 from django.views import View
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
 
 # Create your views here.
 
-def main(request): # лист рецептов,
-    recipes_list = Recipe.objects.all()
+def main(request): # лист рецептов
+    search_query = request.GET.get('search', '')
+    if search_query:
+        recipes_list = Recipe.objects.filter(
+            Q(recipe_name__icontains=search_query) | Q(description__icontains=search_query))
+    else:
+        recipes_list = Recipe.objects.order_by('-pub_date')
     null_recipe = Recipe()
     raw_category = null_recipe.GLOBAL_CATEGORY
     site_category = []
@@ -73,6 +79,8 @@ def profile(request):  # пользовательские данные (при �
             post_recipe.price = recipe_form.cleaned_data.get("price")
             post_recipe.user = request.user
             post_recipe.category = recipe_form.cleaned_data.get("category")
+            if 'photo' in request.FILES:  # проверка на то, есть ли в реквесте фотки
+                post_recipe.photo = request.FILES['photo']  # если есть, то присваиваем сохраняемому рецепту
             post_recipe.save()
         else:
             return render_to_response('template_name', message='Ошибка добавления рецептов')
