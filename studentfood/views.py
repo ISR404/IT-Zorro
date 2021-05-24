@@ -1,91 +1,111 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
-# from django.urls import reverse
-# from django.utils import timezone
+# from django.http import HttpResponse
 from .models import Recipe, User, Comment
-# from django.http import Http404
+from django.http import Http404
 from .forms import CommentForm, RecipeForm
-from django.db.models import Q
+from django.views import View
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # Create your views here.
 
-def main(request):  # лист рецептов,
-    search_query = request.GET.get('search', '')
-    if search_query:
-        recipes_list = Recipe.objects.filter(Q(recipe_name__icontains=search_query) | Q(description__icontains=search_query))
-    else:
-        recipes_list = Recipe.objects.order_by('-pub_date')
+def main(request): # лист рецептов,
+    recipes_list = Recipe.objects.all()
     null_recipe = Recipe()
     raw_category = null_recipe.GLOBAL_CATEGORY
     site_category = []
-    first_arg = []
     for elem in raw_category:
         site_category.append(elem[1])
-        first_arg.append(elem[0])
+
+    paginator = Paginator(recipes_list, 3)
+    page = request.GET.get('page')
+    try:
+        recipes = paginator.page(page)
+    except PageNotAnInteger:
+        recipes = paginator.page(1)
+    except EmptyPage:
+        recipes = paginator.page(paginator.num_pages)
+
     context = {'recipes_list': recipes_list,
+               'page': page,
+               'recipes': recipes,
                'site_category': site_category,
-               'first_arg': first_arg,
-               'raw_category': raw_category
-               }
+              }
     return render(request, 'studentfood/html/main.html', context)
 
 
 def detail(request, recipe_id):  # объект (написать список полей)
     recipe_detail = get_object_or_404(Recipe, pk=recipe_id)
-    comment_list = recipe_detail.comment_set.order_by('pub_date')
-    if request.user.is_authenticated:
-        if request.method == 'GET':
-            comment_form = CommentForm()
+    comment_list = recipe_detail.comment_set.all()
+    comments_count = comment_list.count()
+    comment_form = CommentForm()
+    post_comment = None
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        post_comment = Comment()
+        if comment_form.is_valid():
+            post_comment.text = comment_form.cleaned_data.get("text")
+            post_comment.recipe = get_object_or_404(Recipe, pk=recipe_id)
+            post_comment.user = request.user
+            post_comment.save()
 
-        if request.method == 'POST':
-            comment_form = CommentForm(request.POST)
-            post_comment = Comment()
-            if comment_form.is_valid():
-                post_comment.text = comment_form.cleaned_data.get("text")
-                post_comment.recipe = get_object_or_404(Recipe, pk=recipe_id)
-                post_comment.user = request.user
-                post_comment.save()
-                return render(request, 'studentfood/html/product.html', {'recipe_detail': recipe_detail,
-                                                                         'comment_form': comment_form,
-                                                                         'comment_list': comment_list})
+    context = {'recipe_detail': recipe_detail,
+               'comment_list': comment_list,
+               'comment_form': comment_form,
+               'post_comment': post_comment,
+               'comments_count' : comments_count
+              }
+    return render(request, 'studentfood/html/product.html', context)
 
-    return render(request, 'studentfood/html/product.html', {'recipe_detail': recipe_detail,
-                                                             'comment_list': comment_list})
-
-
-def register(request):  # реализация Димы
-    return render(request, 'profiles/register.html')
 
 
 def profile(request):  # пользовательские данные (при переходе возвращает объект пользователя)
-    return render(request, 'profiles/profile.html')
+    recipes_list = Recipe.objects.order_by()
+    recipe_form = RecipeForm()
+    # Создание рецепта
+
+    if request.method == 'POST':
+        recipe_form = RecipeForm(request.POST)
+        post_recipe = Recipe()
+        if recipe_form.is_valid():
+            post_recipe.recipe_name = recipe_form.cleaned_data.get("recipe_name")
+            post_recipe.description = recipe_form.cleaned_data.get("description")
+            post_recipe.price = recipe_form.cleaned_data.get("price")
+            post_recipe.user = request.user
+            post_recipe.category = recipe_form.cleaned_data.get("category")
+            post_recipe.save()
+        else:
+            return render_to_response('template_name', message='Ошибка добавления рецептов')
+
+    context = {'recipes_list': recipes_list,
+               'recipe_form': recipe_form,
+              }
+    return render(request, 'studentfood/html/profiles/profile.html', context)
 
 
-def create_recipe(request):
+def category_filter(request):
+    pass
+
+
+"""def create_recipe(request):
     if request.user.is_authenticated:
         if request.method == 'GET':
             recipe_form = RecipeForm()
             recipe_form.user = request.user
-            return render(request, 'studentfood/backend-temp/test_recipe_create.html', {'recipe_form': recipe_form,
+            return render(request, 'studentfood/html/profiles/profile.html', {'recipe_form': recipe_form,
                                                                                         'request': request})
         if request.method == 'POST':
-            recipe_form = RecipeForm(request.POST, request.FILES)
+            recipe_form = RecipeForm(request.POST)
             post_recipe = Recipe()
             if recipe_form.is_valid():
-                if 'photo' in request.FILES:  # проверка на то, есть ли в реквесте фотки
-                    post_recipe.photo = request.FILES['photo']  # если есть, то присваиваем сохраняемому рецепту
                 post_recipe.recipe_name = recipe_form.cleaned_data.get("recipe_name")
                 post_recipe.description = recipe_form.cleaned_data.get("description")
                 post_recipe.price = recipe_form.cleaned_data.get("price")
                 post_recipe.user = request.user
                 post_recipe.category = recipe_form.cleaned_data.get("category")
                 post_recipe.save()
-                return render(request, 'studentfood/backend-temp/test_recipe_create.html')
+                return render(request, 'studentfood/html/profiles/profile.html')
             else:
                 return HttpResponse('Ваша форма недействительна!')
     else:
-        return HttpResponse('Сначала нужно авторизироваться!')
-
-
-
+        return HttpResponse('Сначала нужно авторизироваться!')"""

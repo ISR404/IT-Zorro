@@ -18,7 +18,7 @@ def login_view(request):
         password = form.cleaned_data.get("password")
         user = authenticate(username=username, password=password)
         login(request, user)
-        return redirect("/catalog")
+        return redirect("/profile")
     return render(request, "studentfood/html/registration/form.html", {"form": form, "title": title})
 
 
@@ -26,7 +26,7 @@ def register_view(request):
     title = "register"
     form = UserRegisterForm(request.POST or None)
     if form.is_valid():
-        user = form.save(commit=False)
+        user = form.save(commit=True)
         password = form.cleaned_data.get('password')
         user.set_password(password)
         user.save()
