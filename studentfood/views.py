@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
-from django.urls import reverse
-from django.utils import timezone
+# from django.urls import reverse
+# from django.utils import timezone
 from .models import Recipe, User, Comment
-from django.http import Http404
+# from django.http import Http404
 from .forms import CommentForm, RecipeForm
+from django.db.models import Q
 
 
 # Create your views here.
@@ -12,7 +13,7 @@ from .forms import CommentForm, RecipeForm
 def main(request):  # лист рецептов,
     search_query = request.GET.get('search', '')
     if search_query:
-        recipes_list = Recipe.objects.filter(recipe_name__icontains=search_query)
+        recipes_list = Recipe.objects.filter(Q(recipe_name__icontains=search_query) | Q(description__icontains=search_query))
     else:
         recipes_list = Recipe.objects.order_by('-pub_date')
     null_recipe = Recipe()
