@@ -9,7 +9,12 @@ from .forms import CommentForm, RecipeForm
 
 # Create your views here.
 
-def main(request, use_filter=''):  # лист рецептов,
+def main(request):  # лист рецептов,
+    search_query = request.GET.get('search', '')
+    if search_query:
+        recipes_list = Recipe.objects.filter(recipe_name__icontains=search_query)
+    else:
+        recipes_list = Recipe.objects.order_by('-pub_date')
     null_recipe = Recipe()
     raw_category = null_recipe.GLOBAL_CATEGORY
     site_category = []
@@ -17,10 +22,6 @@ def main(request, use_filter=''):  # лист рецептов,
     for elem in raw_category:
         site_category.append(elem[1])
         first_arg.append(elem[0])
-    if use_filter == '':
-        recipes_list = Recipe.objects.order_by('-pub_date')
-    else:
-        recipes_list = Recipe.objects.get(category__iexact=use_filter)
     context = {'recipes_list': recipes_list,
                'site_category': site_category,
                'first_arg': first_arg,

@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'studentfood.apps.StudentfoodConfig',
+    'accounts',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +130,4 @@ STATIC_URL = '/static/'
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')  # указал три важные переменные для работы с медиа!
 MEDIA_URL = '/media/'
 MEDIA_ROOT = MEDIA_DIR
+CRISPY_TEMPLATE_PACK = 'bootstrap'
