@@ -8,11 +8,16 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    photo = models.ImageField('Фото', default='media/user_img/no_photo.jpg', upload_to='user_img')  # установлена стандартная фотография. пользовательские фото будут загружены в media/user_img
+    photo = models.ImageField('Фото', default='user_img/no_photo.jpg', upload_to='user_img')  # установлена стандартная фотография. пользовательские фото будут загружены в media/user_img
 
     def create_recipe(self, recipe_name, description, price, category):  # по идее параметры для функции должны браться
         #  из полей фронта, а потом на их основе выполняется функция создания и привязки рецепта к юзеру
         self.recipe_set.create(recipe_name=recipe_name, description=description, price=price, category=category, pub_date=timezone.now())
+
+    @property
+    def photo_url(self):
+        if self.photo and hasattr(self.photo, 'url'):
+            return self.photo.url
 
 
 class Recipe(models.Model):  # рецепт
@@ -30,10 +35,15 @@ class Recipe(models.Model):  # рецепт
         ('sweet', 'Сладкое/Десерты'),
     ]
     category = models.CharField('Категория', choices=GLOBAL_CATEGORY, max_length=16, blank=True)
-    photo = models.ImageField('Фото рецепта', null=True, blank=True, upload_to='recipe_img')  # фото будут храниться по пути /media/recipe_img (не забудь создать эти папки перед тестом)
+    photo = models.ImageField('Фото рецепта', default='recipe_img/no_photo.jpg', null=True, blank=True, upload_to='recipe_img')  # фото будут храниться по пути /media/recipe_img (не забудь создать эти папки перед тестом)
 
     def __str__(self):  # при запросе класса выводит название рецепта
         return self.recipe_name
+
+    @property
+    def photo_url(self):
+        if self.photo and hasattr(self.photo, 'url'):
+            return self.photo.url
 
     # def calculate_mark(self):  # реализовать оценку
     #     pass
@@ -60,5 +70,3 @@ class Comment(models.Model):
         com.text = text  # на будущее
         com.save()
     """
-
-

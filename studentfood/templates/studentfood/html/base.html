@@ -27,7 +27,7 @@
 
         <!-- Поиск -->
         <div id="search">
-            <form class="d-flex" action="{% url 'studentfood:main' %}">
+            <form class="d-flex">
                 <input class="form-control me-1" type="search" placeholder="Поиск рецептов" aria-label="Search" id="search-input" name="search">
                 <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
             </form>
@@ -45,7 +45,7 @@
                 <!-- <a class="nav-item nav-link" href="/">О нас</a> -->
                 {% if request.user.is_authenticated %}
                       <a href="{% url 'studentfood:profile' %}" class="image-profile">
-                          <img src='../../static/images/kfc.jpg' width="50" height="50" class="rounded-circle" alt="{{ user.username }}">
+                          <img src='{{ user.photo_url }}' width="50" height="50" class="rounded-circle" alt="{{ user.username }}">
                       </a>
                       <a class="nav-item nav-link" href="/logout" id="a-button"><img src='../../static/images/exit.png' width="35" height="35" alt="Выход"></a>
                 {% else %}

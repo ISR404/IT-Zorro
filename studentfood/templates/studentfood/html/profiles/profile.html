@@ -11,9 +11,11 @@
                 <!-- Левая часть -->
             <div class="col">
                 <div class="profile-image">
-                    <img src="../../static/images/kfc.jpg" width="200" height="200" alt="../../static/images/kfc.jpg">
+                    <img src="{{ user.photo_url }}" width="200" height="200" alt="Ваше фото">
                     <h2 align="center">{{ user.username }}</h2>
                 </div>
+
+                <!-- Создание рецепта -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap" id="addbutton">Добавить рецепт</button>
 
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -23,21 +25,10 @@
                         <h5 class="modal-title" id="exampleModalLabel">Добавить рецепт</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
-                        <form action="" method="post">
+                        <form action="" method="post" enctype="multipart/form-data">
                             <div class="modal-body">
                                 {% csrf_token %}
-                                {% comment %}
-                                    <p><input id="recipe_form" type="text" name="recipe_name" value=""></p>
-                                    <p><input id="recipe_form" type="text" name="description" value=""></p>
-                                    <p><select>
-                                        <option disabled>Выберите категорию</option>
-                                        {% for cat in recipe_form.category %}
-                                            <option id="recipe_form" value="{{ cat }}" name="category"></option>
-                                        {% endfor %}
-                                    </select></p>
-                                    <p><input id="recipe_form" type="text" name="price" value=""></p>
-                                    {% endcomment %}
-                                    {{ recipe_form.as_p }}
+                                {{ recipe_form.as_p }}
                               </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary">Добавить рецепт</button>

@@ -10,7 +10,7 @@ from django.db.models import Q
 
 # Create your views here.
 
-def main(request):  # лист рецептов,
+def main(request): # лист рецептов
     search_query = request.GET.get('search', '')
     if search_query:
         recipes_list = Recipe.objects.filter(
@@ -79,6 +79,8 @@ def profile(request):  # пользовательские данные (при �
             post_recipe.price = recipe_form.cleaned_data.get("price")
             post_recipe.user = request.user
             post_recipe.category = recipe_form.cleaned_data.get("category")
+            if 'photo' in request.FILES:  # проверка на то, есть ли в реквесте фотки
+                post_recipe.photo = request.FILES['photo']  # если есть, то присваиваем сохраняемому рецепту
             post_recipe.save()
         else:
             return render_to_response('template_name', message='Ошибка добавления рецептов')
