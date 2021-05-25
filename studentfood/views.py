@@ -1,8 +1,8 @@
-from django.shortcuts import render, get_object_or_404
-# from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseRedirect
 from .models import Recipe, User, Comment
 from django.http import Http404
-from .forms import CommentForm, RecipeForm
+from .forms import CommentForm, RecipeForm, ChangePasswordForm
 from django.views import View
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
@@ -10,12 +10,13 @@ from django.db.models import Q
 
 # Create your views here.
 
-def main(request):  # лист рецептов
+def main(request): # лист рецептов
     search_query = request.GET.get('search', '')
     category_query = request.GET.get('category_button', '')
     null_recipe = Recipe()
     raw_category = null_recipe.GLOBAL_CATEGORY
     site_category = []
+    recipes_list = Recipe.objects.all()
     for elem in raw_category:
         site_category.append(elem[1])
     if search_query:
@@ -28,23 +29,21 @@ def main(request):  # лист рецептов
     else:
         recipes_list = Recipe.objects.order_by('-pub_date')
 
-
-
     paginator = Paginator(recipes_list, 3)
-    page = request.GET.get('page')
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     try:
-        recipes = paginator.page(page)
+        page_obj = paginator.get_page(page_number)
     except PageNotAnInteger:
-        recipes = paginator.page(1)
+        page_obj = paginator.get_page(1)
     except EmptyPage:
-        recipes = paginator.page(paginator.num_pages)
+        page_obj = paginator.get_page(paginator.num_pages)
 
     context = {'recipes_list': recipes_list,
-               'page': page,
-               'recipes': recipes,
-               'site_category': site_category,
+               'page_obj': page_obj,
+               'site_category': site_category
               }
-    return render(request, 'studentfood/html/main.html', context)
+    return render(request, 'studentfood/html/main_page/main.html', context)
 
 
 def detail(request, recipe_id):  # объект (написать список полей)
@@ -61,6 +60,7 @@ def detail(request, recipe_id):  # объект (написать список �
             post_comment.recipe = get_object_or_404(Recipe, pk=recipe_id)
             post_comment.user = request.user
             post_comment.save()
+            return redirect('studentfood:detail', recipe_id)
 
     context = {'recipe_detail': recipe_detail,
                'comment_list': comment_list,
@@ -68,15 +68,16 @@ def detail(request, recipe_id):  # объект (написать список �
                'post_comment': post_comment,
                'comments_count' : comments_count
               }
-    return render(request, 'studentfood/html/product.html', context)
+    return render(request, 'studentfood/html/detail_recipe/product.html', context)
 
 
 
 def profile(request):  # пользовательские данные (при переходе возвращает объект пользователя)
     recipes_list = Recipe.objects.order_by()
     recipe_form = RecipeForm()
-    # Создание рецепта
+    cp_form = ChangePasswordForm()
 
+    # Создание рецепта
     if request.method == 'POST':
         recipe_form = RecipeForm(request.POST)
         post_recipe = Recipe()
@@ -89,11 +90,20 @@ def profile(request):  # пользовательские данные (при �
             if 'photo' in request.FILES:  # проверка на то, есть ли в реквесте фотки
                 post_recipe.photo = request.FILES['photo']  # если есть, то присваиваем сохраняемому рецепту
             post_recipe.save()
-        else:
-            return render_to_response('template_name', message='Ошибка добавления рецептов')
+        #else:
+        #    return render_to_response('template_name', message='Ошибка добавления рецептов')
+
+    #Смена пароля
+    if request.method == 'POST':
+        cp_user = request.user
+        cp_form = ChangePasswordForm(request.POST)
+        if cp_form.is_valid():
+            cp_user.password = cp_form.cleaned_data.get("password")
+            cp_user.save()
 
     context = {'recipes_list': recipes_list,
                'recipe_form': recipe_form,
+               'cp_form': cp_form,
               }
     return render(request, 'studentfood/html/profiles/profile.html', context)
 

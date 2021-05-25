@@ -39,10 +39,10 @@ body {
 }
 
 #content {
-    padding:80px 0px;
+    padding: 80px 0px;
     overflow: hidden;
 }
 
-#category-list {
-    border: 1px red solid;
+#category-obj {
+    margin: 10px;
 }
