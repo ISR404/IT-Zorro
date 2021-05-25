@@ -39,18 +39,14 @@
                             <p>Нет комментариев. Будь первым!</p>
                     {% endfor %}
 
-                    {% if request.user.is_authenticated and user.post_comment is None%}
-                                {% if post_comment %}
-                                    <h2>Ваш комментарий добавлен!</h2>
-                                {% else %}
+
                                     <h2>Добавить комментарий</h2>
                                     <form action="." method="post">
                                         {% csrf_token %}
                                         {{ comment_form.as_p }}
                                         <p><input type="submit" value="Отправить"></p>
                                     </form>
-                                {% endif %}
-                    {% endif %}
+
                 </div>
             </div>
 

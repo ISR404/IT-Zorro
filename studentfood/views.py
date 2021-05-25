@@ -1,7 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 # from django.http import HttpResponse
+from django.urls import reverse
+
 from .models import Recipe, User, Comment
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from .forms import CommentForm, RecipeForm
 from django.views import View
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -40,7 +42,7 @@ def main(request):  # лист рецептов
                'page': page,
                'recipes': recipes,
                'site_category': site_category,
-              }
+               }
     return render(request, 'studentfood/html/main.html', context)
 
 
@@ -54,17 +56,20 @@ def detail(request, recipe_id):  # объект (написать список �
         comment_form = CommentForm(request.POST)
         post_comment = Comment()
         if comment_form.is_valid():
+            comment_form.save(commit=False)
             post_comment.text = comment_form.cleaned_data.get("text")
             post_comment.recipe = get_object_or_404(Recipe, pk=recipe_id)
             post_comment.user = request.user
             post_comment.save()
+            comment_form.clean()
+            return redirect('studentfood:detail', recipe_id)
 
     context = {'recipe_detail': recipe_detail,
                'comment_list': comment_list,
                'comment_form': comment_form,
                'post_comment': post_comment,
-               'comments_count' : comments_count
-              }
+               'comments_count': comments_count
+               }
     return render(request, 'studentfood/html/product.html', context)
 
 
@@ -90,7 +95,7 @@ def profile(request):  # пользовательские данные (при �
 
     context = {'recipes_list': recipes_list,
                'recipe_form': recipe_form,
-              }
+               }
     return render(request, 'studentfood/html/profiles/profile.html', context)
 
 
