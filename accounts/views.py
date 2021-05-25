@@ -11,7 +11,7 @@ from .forms import UserLoginForm, UserRegisterForm
 # Create your views here.
 
 def login_view(request):
-    title = "Login"
+    title = "Войти"
     form = UserLoginForm(request.POST or None)
     if form.is_valid():
         username = form.cleaned_data.get("username")
@@ -23,7 +23,7 @@ def login_view(request):
 
 
 def register_view(request):
-    title = "register"
+    title = "Зарегистрироваться"
     form = UserRegisterForm(request.POST or None)
     if form.is_valid():
         user = form.save(commit=True)
@@ -33,7 +33,7 @@ def register_view(request):
 
         new_user = authenticate(username=user.username, password=password)
         login(request, new_user)
-        return redirect("/login")
+        return redirect("/profile")
     context = {
         "form": form,
         "title": title,
@@ -42,4 +42,4 @@ def register_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("/catalog")
+    return redirect("/")

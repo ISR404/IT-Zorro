@@ -49,7 +49,10 @@ class Recipe(models.Model):  # рецепт
         sum_marks = 0
         for get_mark in max_marks:
             sum_marks += get_mark.mark_value
-        avg_mark = sum_marks/len(max_marks)
+        if len(max_marks) == 0:
+            avg_mark = 0
+        else:
+            avg_mark = sum_marks/len(max_marks)
         return avg_mark
 
 
