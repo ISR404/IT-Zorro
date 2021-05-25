@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
@@ -24,8 +25,6 @@ class Recipe(models.Model):  # рецепт
     recipe_name = models.CharField('Название', max_length=40)  # название рецепта
     pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)  # дата публикация
     description = models.TextField('Описание')  # описание рецепта
-    avg_mark = 0  # оценка рецепта
-    count_of_submits = 0  # количество людей, поставивших оценку
     price = models.IntegerField('Примерная стоимость', null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     GLOBAL_CATEGORY = [
@@ -45,9 +44,15 @@ class Recipe(models.Model):  # рецепт
         if self.photo and hasattr(self.photo, 'url'):
             return self.photo.url
 
-    # def calculate_mark(self):  # реализовать оценку
-    #     pass
-    #
+    def calculate_mark(self):  # реализовать оценку
+        max_marks = self.mark_set.all()
+        sum_marks = 0
+        for get_mark in max_marks:
+            sum_marks += get_mark.mark_value
+        avg_mark = sum_marks/len(max_marks)
+        return avg_mark
+
+
     # def set_mark(self):  # проверить авторизацию пользователя
     #
     #     pass
@@ -59,14 +64,21 @@ class Comment(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)  # связь комментария с рецептом
     pub_date = models.DateTimeField('Опубликовано', default=timezone.now)
 
-    """
-    def leave_comment(self):
-        com = Comment()
-        recipe = Recipe.objects.get(pk=...)
-        user = User.objects.get(...)  # request во view
-        text = 'some text'
-        com.recipe = recipe
-        com.user = user
-        com.text = text  # на будущее
-        com.save()
-    """
+
+class Mark(models.Model):
+    USER_MARK_SET = [
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    ]
+    mark_value = models.FloatField(choices=USER_MARK_SET, validators=[MinValueValidator(0.0), MaxValueValidator(5.0)])
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('recipe', 'user')
+
+    # def __str__(self):
+    #     return str('Оценка к рецепту ' + self.recipe + ' пользоветелем ' + self.user)

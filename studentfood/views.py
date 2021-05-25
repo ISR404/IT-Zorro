@@ -27,9 +27,6 @@ def main(request):  # лист рецептов
                 recipes_list = Recipe.objects.filter(Q(category__exact=raw[0]))
     else:
         recipes_list = Recipe.objects.order_by('-pub_date')
-
-
-
     paginator = Paginator(recipes_list, 3)
     page = request.GET.get('page')
     try:
@@ -71,7 +68,6 @@ def detail(request, recipe_id):  # объект (написать список �
     return render(request, 'studentfood/html/product.html', context)
 
 
-
 def profile(request):  # пользовательские данные (при переходе возвращает объект пользователя)
     recipes_list = Recipe.objects.order_by()
     recipe_form = RecipeForm()
@@ -98,8 +94,7 @@ def profile(request):  # пользовательские данные (при �
     return render(request, 'studentfood/html/profiles/profile.html', context)
 
 
-def category_filter(request):
-    pass
+# def set_mark
 
 
 """def create_recipe(request):
