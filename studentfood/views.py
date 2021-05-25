@@ -50,6 +50,7 @@ def detail(request, recipe_id):  # объект (написать список �
     recipe_detail = get_object_or_404(Recipe, pk=recipe_id)
     comment_list = recipe_detail.comment_set.all()
     comments_count = comment_list.count()
+    marks_list = recipe_detail.mark_set.all()
     comment_form = CommentForm()
     mark_form = MarkForm()
     post_comment = None
@@ -66,6 +67,12 @@ def detail(request, recipe_id):  # объект (написать список �
             post_comment.save()
             return redirect('studentfood:detail', recipe_id)
         elif mark_form.is_valid():
+            for usr in marks_list:
+                if usr.user == request.user:
+                    edit_mark = recipe_detail.mark_set.get(user=request.user)
+                    edit_mark.mark_value = mark_form.cleaned_data.get('mark_value')
+                    edit_mark.save()
+                    return redirect('studentfood:detail', recipe_id)
             post_mark.mark_value = mark_form.cleaned_data.get('mark_value')
             post_mark.user = request.user
             post_mark.recipe = get_object_or_404(Recipe, pk=recipe_id)
