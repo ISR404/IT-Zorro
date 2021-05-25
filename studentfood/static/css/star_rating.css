@@ -3,6 +3,7 @@
     align-items: flex-end;
     font-size: 40px;
     line-height: 0.75;
+    overflow: no-content;
 }
 
 .rating_body{

@@ -2,22 +2,27 @@
 {% load crispy_forms_tags %}
 {% block title %}Рецепты для студентов{% endblock %}
 {% block stat%}
-    <link href="{% static "css/product.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "css/detail.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "css/star_rating.css" %}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block main %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-2">
-                <img src="{{ recipe_detail.photo_url }}" width="200" height="200" alt="Технические неполадки">
-                <form action="{% url 'studentfood:favourite_add' recipe_detail.id %}" method="post">
+                <div>
+                    <img src="{{ recipe_detail.photo_url }}" width="200" height="200" alt="Технические неполадки">
+                </div>
+                <div class="favorite-input">
+                    <form action="{% url 'studentfood:favourite_add' recipe_detail.id %}" method="post">
                     {% csrf_token %}
-                <input type="submit" value="Добавить в избранное" name="favourite_click">
-                </form>
+                    <input type="submit" value="Добавить в избранное" name="favourite_click">
+                    </form>
+                </div>
             </div>
 
             <div class="col-10">
-                <h6>{{ recipe_detail.pub_date|date:"d.m.Y" }}</h6>
+                <h6>{{ recipe_detail.user }} : {{ recipe_detail.pub_date|date:"d.m.Y" }}</h6>
                 <h1>{{ recipe_detail.recipe_name }}</h1>
                 <p>{{ recipe_detail.description }}</p>
             </div>
@@ -27,12 +32,27 @@
             <div class="col-2"></div>
 
             <div class="col-8">
-                <h1>Рейтинг: {{ recipe_detail.calculate_mark }}</h1>
-                <form action="" method="post">
+                <div class="rating rating_set">
+                  <div class="rating_body">
+                      <div class="rating_active"></div>
+                      <div class="rating_items">
+                          <input type="radio" class="rating_item" value="1" name="rating">
+                          <input type="radio" class="rating_item" value="2" name="rating">
+                          <input type="radio" class="rating_item" value="3" name="rating">
+                          <input type="radio" class="rating_item" value="4" name="rating">
+                          <input type="radio" class="rating_item" value="5" name="rating">
+                      </div>
+                  </div>
+                  <div class="rating_value">{{ recipe_detail.calculate_mark }}</div>
+                </div>
+                <br>
+                <div>
+                    <form action="" method="post">
                     {% csrf_token %}
                     {{ mark_form.as_p }}
                     <input type="submit" value="Поставить оценку!">
-                </form>
+                    </form>
+                </div>
                 <br>
                 <div class="row">
                     <p>
@@ -66,4 +86,8 @@
             <div class="col-2"></div>
         </div>
     </div>
+{% endblock %}
+
+{% block java %}
+    <script type="text/javascript" src={% static "js/rating.js" %}></script>
 {% endblock %}

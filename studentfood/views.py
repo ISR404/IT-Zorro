@@ -90,7 +90,7 @@ def detail(request, recipe_id):  # объект (написать список �
                'mark_form': mark_form,
               }
 
-    return render(request, 'studentfood/html/detail_recipe/product.html', context)
+    return render(request, 'studentfood/html/detail_recipe/detail.html', context)
 
 
 @login_required
@@ -126,9 +126,8 @@ def profile(request):  # пользовательские данные (при �
     #Смена пароля
     if request.method == 'POST':
         cp_user = request.user
-        cp_form = ChangePasswordForm(request.POST)
-        if cp_form.is_valid():
-            cp_user.password = cp_form.cleaned_data.get("password")
+        if request.method == "POST":
+            cp_user.password = request.POST.get("password")
             cp_user.save()
 
     context = {'recipes_list': recipes_list,
@@ -137,31 +136,3 @@ def profile(request):  # пользовательские данные (при �
                'favorite_list': favorite_list,
               }
     return render(request, 'studentfood/html/profiles/profile.html', context)
-
-
-def category_filter(request):
-    pass
-
-
-"""def create_recipe(request):
-    if request.user.is_authenticated:
-        if request.method == 'GET':
-            recipe_form = RecipeForm()
-            recipe_form.user = request.user
-            return render(request, 'studentfood/html/profiles/profile.html', {'recipe_form': recipe_form,
-                                                                                        'request': request})
-        if request.method == 'POST':
-            recipe_form = RecipeForm(request.POST)
-            post_recipe = Recipe()
-            if recipe_form.is_valid():
-                post_recipe.recipe_name = recipe_form.cleaned_data.get("recipe_name")
-                post_recipe.description = recipe_form.cleaned_data.get("description")
-                post_recipe.price = recipe_form.cleaned_data.get("price")
-                post_recipe.user = request.user
-                post_recipe.category = recipe_form.cleaned_data.get("category")
-                post_recipe.save()
-                return render(request, 'studentfood/html/profiles/profile.html')
-            else:
-                return HttpResponse('Ваша форма недействительна!')
-    else:
-        return HttpResponse('Сначала нужно авторизироваться!')"""

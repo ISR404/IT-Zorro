@@ -5,12 +5,24 @@
 
                         <div class="col">
                             <div class="card h-100 w-75 border-info">
-                                <a href="{% url 'studentfood:detail' content.id%}"><img src="{{ content.added_recipe.photo_url }}" class="card-img-top" alt="Изображение отсутствует"></a>
+                                <a href="{% url 'studentfood:detail' content.added_recipe.id%}"><img src="{{ content.added_recipe.photo_url }}" class="card-img-top" alt="Изображение отсутствует"></a>
                               <div class="card-body">
-                                <a href="{% url 'studentfood:detail' content.id%}"><h5 class="card-title">{{ content.added_recipe.recipe_name }}</h5>
-                                <p class="card-text">{{ content.added_recipe.description }}</p>
+                                <a href="{% url 'studentfood:detail' content.added_recipe.id%}"><h5 class="card-title">{{ content.added_recipe.recipe_name }}</h5>
+                                <p class="card-text">{{ content.added_recipe.description|truncatechars:50 }}</p>
                                 <span>Цена: {{ content.added_recipe.price }} рублей</span></a>
-                                <div class="star-ratting">&nbsp;</div>
+                                <div class="rating">
+                                  <div class="rating_body">
+                                      <div class="rating_active"></div>
+                                      <div class="rating_items">
+                                          <input type="radio" class="rating_item" value="1" name="rating">
+                                          <input type="radio" class="rating_item" value="2" name="rating">
+                                          <input type="radio" class="rating_item" value="3" name="rating">
+                                          <input type="radio" class="rating_item" value="4" name="rating">
+                                          <input type="radio" class="rating_item" value="5" name="rating">
+                                      </div>
+                                  </div>
+                                  <div class="rating_value">{{ content.added_recipe.calculate_mark }}</div>
+                                </div>
                                 <span>{{ content.added_recipe.pub_date|date:"d.m.Y" }}</span>
                               </div>
                             </div>

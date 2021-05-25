@@ -6,3 +6,7 @@
     background: white;
     overflow: hidden;
 }
+
+.favorite-input{
+    margin-top: 5px;
+}

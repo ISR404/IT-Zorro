@@ -1,6 +1,7 @@
 {% extends 'studentfood/html/base.html' %}{% load static%}
 {% block stat%}
     <link href="{% static "css/profile.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "css/star_rating.css" %}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block title %}Профиль {{ user.username }}{% endblock %}
@@ -16,7 +17,7 @@
                 </div>
 
                 <!-- Создание рецепта -->
-                {% include "studentfood/html/profiles/create_recipe.html"%}
+                    {% include "studentfood/html/profiles/create_recipe.html"%}
 
             </div>
 
@@ -62,9 +63,6 @@
                   </div>
                 </div>
 
-                <a role="button" class="btn btn-danger" data-bs-toggle="button" href="{% url 'logout' %}">Выйти из профиля</a>
-                <a role="button" class="btn btn-success" data-bs-toggle="button" href="{% url 'studentfood:main' %}">Главная страница</a>
-
             </div>
 
 
@@ -77,4 +75,5 @@
 
 {% block java %}
     <script type="text/javascript" src={% static "js/profile.js" %}></script>
+    <script type="text/javascript" src={% static "js/rating.js" %}></script>
 {% endblock %}
