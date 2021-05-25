@@ -14,7 +14,6 @@ def main(request):  # лист рецептов
     null_recipe = Recipe()
     raw_category = null_recipe.GLOBAL_CATEGORY
     site_category = []
-    recipes_list = Recipe.objects.all()
     for elem in raw_category:
         site_category.append(elem[1])
     if search_query:
@@ -123,12 +122,6 @@ def profile(request):  # пользовательские данные (при �
             recipe_form.clean()
 
     # Смена пароля
-    if request.method == 'POST':
-        cp_user = request.user
-        cp_form = ChangePasswordForm(request.POST)
-        if cp_form.is_valid():
-            cp_user.password = cp_form.cleaned_data.get("password")
-            cp_user.save()
 
     context = {'recipes_list': recipes_list,
                'recipe_form': recipe_form,
@@ -136,3 +129,13 @@ def profile(request):  # пользовательские данные (при �
                'favorite_list': favorite_list,
               }
     return render(request, 'studentfood/html/profiles/profile.html', context)
+
+
+def change_password(request):
+    if request.method == 'POST':
+        cp_user = request.user
+        cp_form = ChangePasswordForm(request.POST)
+        if cp_form.is_valid():
+            cp_user.set_password(cp_form.cleaned_data.get("password"))
+            cp_user.save()
+    return redirect('studentfood:main')
