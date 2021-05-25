@@ -25,3 +25,7 @@ class MarkForm(forms.ModelForm):
     class Meta:
         model = Mark
         fields = ('mark_value',)
+
+
+class BookMarkForm(forms.ModelForm):
+    check = forms.BooleanField()

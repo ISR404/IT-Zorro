@@ -56,11 +56,6 @@ class Recipe(models.Model):  # рецепт
         return avg_mark
 
 
-    # def set_mark(self):  # проверить авторизацию пользователя
-    #
-    #     pass
-
-
 class Comment(models.Model):
     text = models.CharField('Текст комментария', max_length=1500)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # связь комментария с пользователем
@@ -83,5 +78,10 @@ class Mark(models.Model):
     class Meta:
         unique_together = ('recipe', 'user')
 
-    # def __str__(self):
-    #     return str('Оценка к рецепту ' + self.recipe + ' пользоветелем ' + self.user)
+
+class BookMark(models.Model):
+    added_recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    user_added = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('added_recipe', 'user_added')
