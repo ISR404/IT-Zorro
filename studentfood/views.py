@@ -100,7 +100,6 @@ def favourite_add(request, recipe_id):
     return redirect('studentfood:detail', recipe_id)
 
 
-
 def profile(request):  # пользовательские данные (при переходе возвращает объект пользователя)
     recipes_list = Recipe.objects.order_by()
     favorite_list = request.user.bookmark_set.all()
@@ -120,10 +119,9 @@ def profile(request):  # пользовательские данные (при �
             if 'photo' in request.FILES:  # проверка на то, есть ли в реквесте фотки
                 post_recipe.photo = request.FILES['photo']  # если есть, то присваиваем сохраняемому рецепту
             post_recipe.save()
-        #else:
-        #    return render_to_response('template_name', message='Ошибка добавления рецептов')
+            recipe_form.clean()
 
-    #Смена пароля
+    # Смена пароля
     if request.method == 'POST':
         cp_user = request.user
         cp_form = ChangePasswordForm(request.POST)
