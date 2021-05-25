@@ -1,0 +1,91 @@
+#list-recipes {
+    padding: 20px;
+}
+
+.col * {
+    margin: 0;
+}
+
+.price-line {
+    margin-top: 5px;
+    margin-bottom: 2px;
+    border: 1px solid darkblue;
+    background: white;
+}
+
+.price-line:last-child {
+    margin-bottom: 0;
+}
+
+.price-line:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.product-image {
+    width: 150px;
+    height: 150px;
+    float: left;
+    margin: 5px 10px 0px 5px;
+}
+
+.product-image a {
+    display: block;
+    outline: none;
+}
+
+.product-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.product-content {
+    margin-left: 30px;
+    padding: 5px 0px 0px 5px;
+}
+
+.product-data {
+    float: right;
+}
+
+.product-title {
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    line-height: 1;
+}
+
+.product-title a {
+    text-decoration: none;
+    color: #FF9919;
+}
+
+.product-description {
+    font-size: 16px;
+    margin-bottom: 20px;
+    line-height: 1;
+    margin-left: 10px;
+}
+
+.product-description a {
+    text-decoration: none;
+    color: black;
+    overflow: hidden;
+}
+
+.price-box {
+    color: #5993bb;
+    font-size: 14px;
+    margin-bottom: 10px;
+    line-height: 1;
+    margin-left: 10px;
+}
+
+.star-rating {
+    margin-bottom: 10px;
+    font-size: 13px;
+    position: relative;
+}

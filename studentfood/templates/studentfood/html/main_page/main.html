@@ -1,0 +1,43 @@
+{% extends 'studentfood/html/base.html' %}{% load static%}
+{% block stat%}
+    <link href="{% static "css/list_recipes.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "css/star_rating.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block title %}Рецепты для студентов{% endblock %}
+
+{% block main %}
+
+    <div class="container-fluid">
+        <div class="row">
+                <!-- Категории -->
+            <form action="{% url 'studentfood:main' %}" class="col" id="category-list">
+                <p><h2>Категории</h2></p>
+                <div class="list-group">
+                    {% for cat in site_category %}
+                        <input type="submit" value="{{ cat }}" name="category_button" id="category-obj">
+                    {% endfor %}
+                </div>
+            </form>
+
+
+                <!-- Список рецептов-->
+            <div class="col-9" id="list-recipes">
+                {% if recipes_list.count > 0 %}
+                    {% include "studentfood/html/main_page/list_recipes.html"%}
+                {% endif %}
+                {% include "studentfood/html/main_page/pagination.html" with page=page_obj %}
+            </div>
+
+
+                <!-- Пустое место справа-->
+            <div class="col">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block java %}
+    <script type="text/javascript" src={% static "js/rating.js" %}></script>
+{% endblock %}

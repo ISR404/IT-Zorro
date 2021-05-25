@@ -1,0 +1,80 @@
+{% extends 'studentfood/html/base.html' %}{% load static%}
+{% block stat%}
+    <link href="{% static "css/profile.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block title %}Профиль {{ user.username }}{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        <div class="row">
+                <!-- Левая часть -->
+            <div class="col">
+                <div class="profile-image">
+                    <img src="{{ user.photo_url }}" width="200" height="200" alt="Ваше фото">
+                    <h2 align="center">{{ user.username }}</h2>
+                </div>
+
+                <!-- Создание рецепта -->
+                {% include "studentfood/html/profiles/create_recipe.html"%}
+
+            </div>
+
+
+                <!-- Основная часть -->
+            <div class="col-10" id="main-profile">
+                  <!-- Вкладки -->
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="own-tab" data-bs-toggle="tab" data-bs-target="#own" type="button" role="tab" aria-controls="own" aria-selected="true">Собственные рецепты</button>
+                  </li>
+
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="favorite-tab" data-bs-toggle="tab" data-bs-target="#favorite" type="button" role="tab" aria-controls="favorite" aria-selected="false">Избранные рецепты</button>
+                  </li>
+
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">Настройки профиля</button>
+                  </li>
+                </ul>
+
+
+                <div class="tab-content" id="myTabContent">
+                    <!-- Вкладка "Ваши рецепты" -->
+                  {% include "studentfood/html/profiles/user_recipes.html"%}
+
+
+                    <!-- Вкладка "Избранные рецепты" -->
+                  <div class="tab-pane fade" id="favorite" role="tabpanel" aria-labelledby="favorite-tab">
+                      {% include "studentfood/html/profiles/favorite_recipes.html"%}
+                  </div>
+
+
+                    <!-- Вкладка "Настройки профиля" -->
+                  <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                      <p>Смена логина</p>
+
+                      {% include "studentfood/html/profiles/password_change_form.html"%}
+
+                      <p>Смена почты</p>
+
+                      <p>Смена аватара</p>
+                  </div>
+                </div>
+
+                <a role="button" class="btn btn-danger" data-bs-toggle="button" href="{% url 'logout' %}">Выйти из профиля</a>
+                <a role="button" class="btn btn-success" data-bs-toggle="button" href="{% url 'studentfood:main' %}">Главная страница</a>
+
+            </div>
+
+
+                <!-- Правая часть-->
+
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block java %}
+    <script type="text/javascript" src={% static "js/profile.js" %}></script>
+{% endblock %}
