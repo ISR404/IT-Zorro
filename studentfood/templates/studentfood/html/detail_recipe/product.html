@@ -28,6 +28,11 @@
 
             <div class="col-8">
                 <h1>Рейтинг: {{ recipe_detail.calculate_mark }}</h1>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ mark_form.as_p }}
+                    <input type="submit" value="Поставить оценку!">
+                </form>
                 <br>
                 <div class="row">
                     <p>
