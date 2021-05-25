@@ -23,15 +23,20 @@
             <div class="col-2"></div>
 
             <div class="col-8">
-                <h1>Рейтинг</h1>
+                <h1>Рейтинг: {{ recipe_detail.calculate_mark }}</h1>
                 <br>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ mark_form.as_p }}
+                <input type="submit" value="Поставить оценку!">
+            </form>
                 <div class="row">
                     <p>
                         <strong>Комментарии:</strong>
                         <span>{{ comments_count }}</span>
                     </p>
                     {% for comment in comment_list %}
-                            <div class="comment-obj">
+                            <div>
                                 <p><strong>{{ comment.user }}</strong> | Опубликовано: {{ comment.pub_date|date:"d-m-Y H:i" }}</p>
                                 <p>{{ comment.text }}</p>
                             </div>
@@ -39,7 +44,7 @@
                             <p>Нет комментариев. Будь первым!</p>
                     {% endfor %}
 
-                    {% if request.user.is_authenticated %}
+                    {% if request.user.is_authenticated and user.post_comment is None%}
                                 {% if post_comment %}
                                     <h2>Ваш комментарий добавлен!</h2>
                                 {% else %}

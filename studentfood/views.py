@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
-from .models import Recipe, User, Comment
+from .models import Recipe, User, Comment, Mark
 from django.http import Http404
-from .forms import CommentForm, RecipeForm, ChangePasswordForm
+from .forms import CommentForm, RecipeForm, ChangePasswordForm, MarkForm
 from django.views import View
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
@@ -51,25 +51,35 @@ def detail(request, recipe_id):  # объект (написать список �
     comment_list = recipe_detail.comment_set.all()
     comments_count = comment_list.count()
     comment_form = CommentForm()
+    mark_form = MarkForm()
     post_comment = None
+    # post_mark = None
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         post_comment = Comment()
+        mark_form = MarkForm(request.POST)
+        post_mark = Mark()
         if comment_form.is_valid():
             post_comment.text = comment_form.cleaned_data.get("text")
             post_comment.recipe = get_object_or_404(Recipe, pk=recipe_id)
             post_comment.user = request.user
             post_comment.save()
             return redirect('studentfood:detail', recipe_id)
+        elif mark_form.is_valid():
+            post_mark.mark_value = mark_form.cleaned_data.get('mark_value')
+            post_mark.user = request.user
+            post_mark.recipe = get_object_or_404(Recipe, pk=recipe_id)
+            post_mark.save()
+            return redirect('studentfood:detail', recipe_id)
 
     context = {'recipe_detail': recipe_detail,
                'comment_list': comment_list,
                'comment_form': comment_form,
                'post_comment': post_comment,
-               'comments_count' : comments_count
+               'comments_count' : comments_count,
+               'mark_form': mark_form
               }
     return render(request, 'studentfood/html/detail_recipe/product.html', context)
-
 
 
 def profile(request):  # пользовательские данные (при переходе возвращает объект пользователя)
