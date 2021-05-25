@@ -31,7 +31,7 @@
                         <span>{{ comments_count }}</span>
                     </p>
                     {% for comment in comment_list %}
-                            <div>
+                            <div class="comment-obj">
                                 <p><strong>{{ comment.user }}</strong> | Опубликовано: {{ comment.pub_date|date:"d-m-Y H:i" }}</p>
                                 <p>{{ comment.text }}</p>
                             </div>
@@ -39,7 +39,7 @@
                             <p>Нет комментариев. Будь первым!</p>
                     {% endfor %}
 
-                    {% if request.user.is_authenticated and user.post_comment is None%}
+                    {% if request.user.is_authenticated %}
                                 {% if post_comment %}
                                     <h2>Ваш комментарий добавлен!</h2>
                                 {% else %}

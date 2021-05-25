@@ -1,3 +1,8 @@
 .comment-count{
     color: black;
 }
+
+.comment-obj{
+    background: white;
+    overflow: hidden;
+}

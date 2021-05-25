@@ -10,6 +10,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     photo = models.ImageField('Фото', default='user_img/no_photo.jpg', upload_to='user_img')  # установлена стандартная фотография. пользовательские фото будут загружены в media/user_img
 
+
     def create_recipe(self, recipe_name, description, price, category):  # по идее параметры для функции должны браться
         #  из полей фронта, а потом на их основе выполняется функция создания и привязки рецепта к юзеру
         self.recipe_set.create(recipe_name=recipe_name, description=description, price=price, category=category, pub_date=timezone.now())
