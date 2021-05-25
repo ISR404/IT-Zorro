@@ -18,7 +18,7 @@ def login_view(request):
         password = form.cleaned_data.get("password")
         user = authenticate(username=username, password=password)
         login(request, user)
-        return redirect("/profile")
+        return redirect('studentfood:profile')
     return render(request, "studentfood/html/registration/form.html", {"form": form, "title": title})
 
 
@@ -33,7 +33,7 @@ def register_view(request):
 
         new_user = authenticate(username=user.username, password=password)
         login(request, new_user)
-        return redirect("/profile")
+        return redirect("studentfood:profile")
     context = {
         "form": form,
         "title": title,
@@ -42,4 +42,4 @@ def register_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("/")
+    return redirect('studentfood:main')

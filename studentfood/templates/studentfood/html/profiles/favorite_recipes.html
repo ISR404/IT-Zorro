@@ -1,0 +1,22 @@
+<div class="tab-pane fade show active" id="own" role="tabpanel" aria-labelledby="own-tab" style="margin: 5px">
+    {% if favorite_list.count > 0 %}
+        <div class="row row-cols-4 g-2">
+            {% for content in favorite_list %}
+
+                        <div class="col">
+                            <div class="card h-100 w-75 border-info">
+                                <a href="{% url 'studentfood:detail' content.id%}"><img src="{{ content.added_recipe.photo_url }}" class="card-img-top" alt="Изображение отсутствует"></a>
+                              <div class="card-body">
+                                <a href="{% url 'studentfood:detail' content.id%}"><h5 class="card-title">{{ content.added_recipe.recipe_name }}</h5>
+                                <p class="card-text">{{ content.added_recipe.description }}</p>
+                                <span>Цена: {{ content.added_recipe.price }} рублей</span></a>
+                                <div class="star-ratting">&nbsp;</div>
+                                <span>{{ content.added_recipe.pub_date|date:"d.m.Y" }}</span>
+                              </div>
+                            </div>
+                        </div>
+
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

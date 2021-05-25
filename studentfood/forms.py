@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, Recipe, Comment
+from .models import User, Recipe, Comment, Mark
 from django.db import models
 
 
@@ -19,3 +19,13 @@ class ChangePasswordForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ("password",)
+
+
+class MarkForm(forms.ModelForm):
+    class Meta:
+        model = Mark
+        fields = ('mark_value',)
+
+
+class BookMarkForm(forms.ModelForm):
+    check = forms.BooleanField()

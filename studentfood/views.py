@@ -1,8 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseRedirect
-from .models import Recipe, User, Comment
+from .models import Recipe, User, Comment, Mark, BookMark
 from django.http import Http404
-from .forms import CommentForm, RecipeForm, ChangePasswordForm
+from .forms import CommentForm, RecipeForm, ChangePasswordForm, MarkForm, BookMarkForm
 from django.views import View
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
@@ -50,11 +51,17 @@ def detail(request, recipe_id):  # объект (написать список �
     recipe_detail = get_object_or_404(Recipe, pk=recipe_id)
     comment_list = recipe_detail.comment_set.all()
     comments_count = comment_list.count()
+    marks_list = recipe_detail.mark_set.all()
     comment_form = CommentForm()
+    mark_form = MarkForm()
     post_comment = None
+    # post_mark = None
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         post_comment = Comment()
+        mark_form = MarkForm(request.POST)
+        post_mark = Mark()
+
         if comment_form.is_valid():
             post_comment.text = comment_form.cleaned_data.get("text")
             post_comment.recipe = get_object_or_404(Recipe, pk=recipe_id)
@@ -62,18 +69,41 @@ def detail(request, recipe_id):  # объект (написать список �
             post_comment.save()
             return redirect('studentfood:detail', recipe_id)
 
+        elif mark_form.is_valid():
+            for usr in marks_list:
+                if usr.user == request.user:
+                    edit_mark = recipe_detail.mark_set.get(user=request.user)
+                    edit_mark.mark_value = mark_form.cleaned_data.get('mark_value')
+                    edit_mark.save()
+                    return redirect('studentfood:detail', recipe_id)
+            post_mark.mark_value = mark_form.cleaned_data.get('mark_value')
+            post_mark.user = request.user
+            post_mark.recipe = get_object_or_404(Recipe, pk=recipe_id)
+            post_mark.save()
+            return redirect('studentfood:detail', recipe_id)
+
     context = {'recipe_detail': recipe_detail,
                'comment_list': comment_list,
                'comment_form': comment_form,
                'post_comment': post_comment,
-               'comments_count' : comments_count
+               'comments_count' : comments_count,
+               'mark_form': mark_form,
               }
+
     return render(request, 'studentfood/html/detail_recipe/product.html', context)
+
+
+@login_required
+def favourite_add(request, recipe_id):
+    if request.method == 'POST':
+        request.user.bookmark_set.create(added_recipe=get_object_or_404(Recipe, pk=recipe_id), user_added=request.user)
+    return redirect('studentfood:detail', recipe_id)
 
 
 
 def profile(request):  # пользовательские данные (при переходе возвращает объект пользователя)
     recipes_list = Recipe.objects.order_by()
+    favorite_list = request.user.bookmark_set.all()
     recipe_form = RecipeForm()
     cp_form = ChangePasswordForm()
 
@@ -104,6 +134,7 @@ def profile(request):  # пользовательские данные (при �
     context = {'recipes_list': recipes_list,
                'recipe_form': recipe_form,
                'cp_form': cp_form,
+               'favorite_list': favorite_list,
               }
     return render(request, 'studentfood/html/profiles/profile.html', context)
 
