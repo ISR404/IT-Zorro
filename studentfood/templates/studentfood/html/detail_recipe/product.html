@@ -10,10 +10,12 @@
         <div class="row">
             <div class="col-2">
                 <img src="{{ recipe_detail.photo_url }}" width="200" height="200" alt="Технические неполадки">
+                {% if request.user.is_authenticated and request.user.id not in bookmark_user_ids%}
                 <form action="{% url 'studentfood:favourite_add' recipe_detail.id %}" method="post">
                     {% csrf_token %}
                 <input type="submit" value="Добавить в избранное" name="favourite_click">
                 </form>
+                {% endif %}
             </div>
 
             <div class="col-10">
@@ -28,19 +30,23 @@
 
             <div class="col-8">
                 <h1>Рейтинг: {{ recipe_detail.calculate_mark }}</h1>
+                {% if request.user.is_authenticated %}
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ mark_form.as_p }}
+                    <input type="submit" value="Поставить оценку!">
+                </form>
+                    {% else %}
+                    <p>Войдите в систему, чтобы поставить оценку.</p>
+                {% endif %}
                 <br>
-            <form action="" method="post">
-                {% csrf_token %}
-                {{ mark_form.as_p }}
-                <input type="submit" value="Поставить оценку!">
-            </form>
                 <div class="row">
                     <p>
                         <strong>Комментарии:</strong>
                         <span>{{ comments_count }}</span>
                     </p>
                     {% for comment in comment_list %}
-                            <div>
+                            <div class="comment-obj">
                                 <p><strong>{{ comment.user }}</strong> | Опубликовано: {{ comment.pub_date|date:"d-m-Y H:i" }}</p>
                                 <p>{{ comment.text }}</p>
                             </div>
@@ -48,7 +54,7 @@
                             <p>Нет комментариев. Будь первым!</p>
                     {% endfor %}
 
-                    {% if request.user.is_authenticated and user.post_comment is None%}
+                    {% if request.user.is_authenticated %}
                                 {% if post_comment %}
                                     <h2>Ваш комментарий добавлен!</h2>
                                 {% else %}

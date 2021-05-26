@@ -1,16 +1,37 @@
 {% for recipe in page_obj%}
-        <div class="price-line">
+    <div class="price-line">
 
-        <div class="product-image">
-          <a href="{% url 'studentfood:detail' recipe.id%}"><img src="{{ recipe.photo_url }}" width="100" height="100" alt="{{ recipe.recipe_name }}"></a>
-        </div>
+    <div class="product-image">
+      <a href="{% url 'studentfood:detail' recipe.id%}"><img src="{{ recipe.photo_url }}" alt="{{ recipe.recipe_name }}"></a>
+    </div>
 
-        <div class="product-content">
-          <div class="product-title"><a href="{% url 'studentfood:detail' recipe.id%}">{{ recipe.recipe_name }}</a></div>
-          <div class="product-description"><a href="{% url 'studentfood:detail' recipe.id%}">{{ recipe.description }}</a></div>
-          <div class="price-box"><span>Цена: {{ recipe.price }} рублей</span></div>
-          <div class="star-rating">&nbsp;</div>
-        </div>
+    <div class="product-content">
+      <div class="row">
 
-        </div>
+          <div class="col-8 product-title"><a href="{% url 'studentfood:detail' recipe.id%}">{{ recipe.recipe_name }}</a></div>
+
+          <div class="col-2">
+              <div class="rating">
+                  <div class="rating_body">
+                      <div class="rating_active"></div>
+                      <div class="rating_items">
+                          <input type="radio" class="rating_item" value="1" name="rating">
+                          <input type="radio" class="rating_item" value="2" name="rating">
+                          <input type="radio" class="rating_item" value="3" name="rating">
+                          <input type="radio" class="rating_item" value="4" name="rating">
+                          <input type="radio" class="rating_item" value="5" name="rating">
+                      </div>
+                  </div>
+                  <div class="rating_value">{{ recipe.calculate_mark }}</div>
+              </div>
+
+
+          </div>
+
+      </div>
+      <div class="product-description"><a href="{% url 'studentfood:detail' recipe.id%}">{{ recipe.description }}</a></div>
+      <div class="price-box"><span>Цена: {{ recipe.price }} рублей</span></div>
+    </div>
+
+    </div>
 {% endfor %}

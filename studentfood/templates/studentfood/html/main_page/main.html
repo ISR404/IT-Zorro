@@ -1,6 +1,7 @@
 {% extends 'studentfood/html/base.html' %}{% load static%}
 {% block stat%}
     <link href="{% static "css/list_recipes.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "css/star_rating.css" %}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block title %}Рецепты для студентов{% endblock %}
@@ -23,7 +24,7 @@
                 <!-- Список рецептов-->
             <div class="col-9" id="list-recipes">
                 {% if recipes_list.count > 0 %}
-                    {% include "studentfood/html/main_page/list_recipes.html" %}
+                    {% include "studentfood/html/main_page/list_recipes.html"%}
                 {% endif %}
                 {% include "studentfood/html/main_page/pagination.html" with page=page_obj %}
             </div>
@@ -35,4 +36,8 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block java %}
+    <script type="text/javascript" src={% static "js/rating.js" %}></script>
 {% endblock %}

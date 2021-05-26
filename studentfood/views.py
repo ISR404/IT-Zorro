@@ -1,23 +1,19 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseRedirect
 from .models import Recipe, User, Comment, Mark, BookMark
-from django.http import Http404
-from .forms import CommentForm, RecipeForm, ChangePasswordForm, MarkForm, BookMarkForm
-from django.views import View
+from .forms import CommentForm, RecipeForm, ChangePasswordForm, MarkForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 
 
 # Create your views here.
 
-def main(request): # лист рецептов
+def main(request):  # лист рецептов
     search_query = request.GET.get('search', '')
     category_query = request.GET.get('category_button', '')
     null_recipe = Recipe()
     raw_category = null_recipe.GLOBAL_CATEGORY
     site_category = []
-    recipes_list = Recipe.objects.all()
     for elem in raw_category:
         site_category.append(elem[1])
     if search_query:
@@ -52,10 +48,13 @@ def detail(request, recipe_id):  # объект (написать список �
     comment_list = recipe_detail.comment_set.all()
     comments_count = comment_list.count()
     marks_list = recipe_detail.mark_set.all()
+    bookmark_list = recipe_detail.bookmark_set.all()
+    bookmark_user_ids = []
+    for row in bookmark_list:
+        bookmark_user_ids.append(row.user_added.id)
     comment_form = CommentForm()
     mark_form = MarkForm()
     post_comment = None
-    # post_mark = None
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
         post_comment = Comment()
@@ -86,8 +85,9 @@ def detail(request, recipe_id):  # объект (написать список �
                'comment_list': comment_list,
                'comment_form': comment_form,
                'post_comment': post_comment,
-               'comments_count' : comments_count,
+               'comments_count': comments_count,
                'mark_form': mark_form,
+               'bookmark_user_ids': bookmark_user_ids
               }
 
     return render(request, 'studentfood/html/detail_recipe/product.html', context)
@@ -100,9 +100,9 @@ def favourite_add(request, recipe_id):
     return redirect('studentfood:detail', recipe_id)
 
 
-
 def profile(request):  # пользовательские данные (при переходе возвращает объект пользователя)
     recipes_list = Recipe.objects.order_by()
+    favorite_list = request.user.bookmark_set.all()
     recipe_form = RecipeForm()
     cp_form = ChangePasswordForm()
 
@@ -119,47 +119,23 @@ def profile(request):  # пользовательские данные (при �
             if 'photo' in request.FILES:  # проверка на то, есть ли в реквесте фотки
                 post_recipe.photo = request.FILES['photo']  # если есть, то присваиваем сохраняемому рецепту
             post_recipe.save()
-        #else:
-        #    return render_to_response('template_name', message='Ошибка добавления рецептов')
+            recipe_form.clean()
 
-    #Смена пароля
-    if request.method == 'POST':
-        cp_user = request.user
-        cp_form = ChangePasswordForm(request.POST)
-        if cp_form.is_valid():
-            cp_user.password = cp_form.cleaned_data.get("password")
-            cp_user.save()
+    # Смена пароля
 
     context = {'recipes_list': recipes_list,
                'recipe_form': recipe_form,
                'cp_form': cp_form,
+               'favorite_list': favorite_list,
               }
     return render(request, 'studentfood/html/profiles/profile.html', context)
 
 
-def category_filter(request):
-    pass
-
-
-"""def create_recipe(request):
-    if request.user.is_authenticated:
-        if request.method == 'GET':
-            recipe_form = RecipeForm()
-            recipe_form.user = request.user
-            return render(request, 'studentfood/html/profiles/profile.html', {'recipe_form': recipe_form,
-                                                                                        'request': request})
-        if request.method == 'POST':
-            recipe_form = RecipeForm(request.POST)
-            post_recipe = Recipe()
-            if recipe_form.is_valid():
-                post_recipe.recipe_name = recipe_form.cleaned_data.get("recipe_name")
-                post_recipe.description = recipe_form.cleaned_data.get("description")
-                post_recipe.price = recipe_form.cleaned_data.get("price")
-                post_recipe.user = request.user
-                post_recipe.category = recipe_form.cleaned_data.get("category")
-                post_recipe.save()
-                return render(request, 'studentfood/html/profiles/profile.html')
-            else:
-                return HttpResponse('Ваша форма недействительна!')
-    else:
-        return HttpResponse('Сначала нужно авторизироваться!')"""
+def change_password(request):
+    if request.method == 'POST':
+        cp_user = request.user
+        cp_form = ChangePasswordForm(request.POST)
+        if cp_form.is_valid():
+            cp_user.set_password(cp_form.cleaned_data.get("password"))
+            cp_user.save()
+    return redirect('studentfood:main')
