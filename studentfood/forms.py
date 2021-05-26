@@ -21,6 +21,12 @@ class ChangePasswordForm(forms.ModelForm):
         fields = ("password",)
 
 
+class ChangePhotoForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('photo',)
+
+
 class MarkForm(forms.ModelForm):
     class Meta:
         model = Mark

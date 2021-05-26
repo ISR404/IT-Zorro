@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Recipe, User, Comment, Mark, BookMark
-from .forms import CommentForm, RecipeForm, ChangePasswordForm, MarkForm
+from .forms import CommentForm, RecipeForm, ChangePasswordForm, MarkForm, ChangePhotoForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 
@@ -105,6 +105,7 @@ def profile(request):  # пользовательские данные (при �
     favorite_list = request.user.bookmark_set.all()
     recipe_form = RecipeForm()
     cp_form = ChangePasswordForm()
+    change_photo_form = ChangePhotoForm()
 
     # Создание рецепта
     if request.method == 'POST':
@@ -127,6 +128,7 @@ def profile(request):  # пользовательские данные (при �
                'recipe_form': recipe_form,
                'cp_form': cp_form,
                'favorite_list': favorite_list,
+               'change_photo_form': change_photo_form,
               }
     return render(request, 'studentfood/html/profiles/profile.html', context)
 
@@ -139,3 +141,16 @@ def change_password(request):
             cp_user.set_password(cp_form.cleaned_data.get("password"))
             cp_user.save()
     return redirect('studentfood:main')
+
+
+def change_photo(request):
+    if request.method == 'POST':
+        change_photo_user = request.user
+        change_photo_form = ChangePhotoForm(request.POST)
+        if change_photo_form.is_valid():
+            if 'photo' in request.FILES:
+                change_photo_user.photo = request.FILES['photo']
+                change_photo_user.save()
+    return redirect('studentfood:profile')
+
+

@@ -1,0 +1,16 @@
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div  class="card">
+    <div  class="card-body">
+    <h4  class="card-title"> Смена фото</h4>
+
+    <form action="{% url 'studentfood:change_photo' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ change_photo_form.as_p }}
+
+    <button  type="submit"  class="btn btn-success"> Сменить аватарку </button>
+    </form>
+    </div>
+    </div>
+{% endblock %}
