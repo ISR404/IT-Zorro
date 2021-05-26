@@ -30,11 +30,15 @@
 
             <div class="col-8">
                 <h1>Рейтинг: {{ recipe_detail.calculate_mark }}</h1>
+                {% if request.user.is_authenticated %}
                 <form action="" method="post">
                     {% csrf_token %}
                     {{ mark_form.as_p }}
                     <input type="submit" value="Поставить оценку!">
                 </form>
+                    {% else %}
+                    <p>Войдите в систему, чтобы поставить оценку.</p>
+                {% endif %}
                 <br>
                 <div class="row">
                     <p>
