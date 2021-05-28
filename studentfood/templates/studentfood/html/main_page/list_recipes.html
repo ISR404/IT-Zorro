@@ -32,6 +32,10 @@
       <div class="product-description"><a href="{% url 'studentfood:detail' recipe.id%}">{{ recipe.description }}</a></div>
       <div class="price-box"><span>Цена: {{ recipe.price }} рублей</span></div>
     </div>
+    <form action="{% url 'studentfood:remove_recipe' recipe.id %}" method="post">
+        {% csrf_token %}
+        <input type="submit" name="reset_button" value="Удалить">
+    </form>
 
     </div>
 {% endfor %}

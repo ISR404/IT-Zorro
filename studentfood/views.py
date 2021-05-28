@@ -24,7 +24,7 @@ def main(request):  # лист рецептов
             if category_query == raw[1]:
                 recipes_list = Recipe.objects.filter(Q(category__exact=raw[0]))
     else:
-        recipes_list = Recipe.objects.order_by('-pub_date')
+        recipes_list = Recipe.objects.filter(Q(is_removed=False)).order_by('-pub_date')
 
     paginator = Paginator(recipes_list, 3)
     page_number = request.GET.get('page')
@@ -154,3 +154,9 @@ def change_photo(request):
     return redirect('studentfood:profile')
 
 
+def remove_recipe(request, recipe_id):
+    if request.method == 'POST':
+        edit_recipe = Recipe.objects.get(pk=recipe_id)
+        edit_recipe.is_removed = True
+        edit_recipe.save()
+    return redirect('studentfood:main')

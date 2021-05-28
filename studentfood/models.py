@@ -35,6 +35,7 @@ class Recipe(models.Model):  # рецепт
     ]
     category = models.CharField('Категория', choices=GLOBAL_CATEGORY, max_length=16, blank=True)
     photo = models.ImageField('Фото рецепта', default='recipe_img/no_photo.jpg', null=True, blank=True, upload_to='recipe_img')  # фото будут храниться по пути /media/recipe_img (не забудь создать эти папки перед тестом)
+    is_removed = models.BooleanField('Статус удаления', default=False)
 
     def __str__(self):  # при запросе класса выводит название рецепта
         return self.recipe_name
