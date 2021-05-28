@@ -31,13 +31,27 @@
 
 
                 <!-- Пустое место справа-->
+
             <div class="col">
             </div>
         </div>
+    <button id="ajax_click">По одной</button>
+    <input type="number" value="" id="page-number">
+    <div class="col" id="test_ajax">
+
+    </div>
+    <button id="ajax_click_all">Все</button>
+    <button id="get_html_click">Получить код страницы</button>
+    <div id="ajax_all">
+
+    </div>
+
     </div>
 
 {% endblock %}
 
 {% block java %}
     <script type="text/javascript" src={% static "js/rating.js" %}></script>
+    <script type="text/javascript" src={% static "js/jquery.js" %}></script>
+    <script src="{% static "js/searchAJAX.js" %}"></script>
 {% endblock %}
