@@ -10,13 +10,15 @@
                 <!--h3>{{ title }}</h3><-->
                 <hr/>
                 <form method='POST' action='' enctype='multipart/form_data'>
-                    {{ form|crispy }}
+                    {{ form.username|as_crispy_field }}
+                    {{ form.password|as_crispy_field }}
+                    {{ form.password2|as_crispy_field }}
                     {% csrf_token %}
                     <input class="description" type='submit' value='{{ title }}'/>
-
                 </form>
             </div>
         </div>
     </div>
     {% endblock %}
 {% endblock %}
+
