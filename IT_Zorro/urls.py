@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from accounts.views import (login_view, register_view, logout_view)
+from studentfood.views import (checkEmail)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,5 +25,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
-    path('reg/', register_view, name='register')
+    path('reg/', register_view, name='register'),
+    path('check_email/', checkEmail),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -4,6 +4,7 @@ from .models import Recipe, User, Comment, Mark, BookMark
 from .forms import CommentForm, RecipeForm, ChangePasswordForm, MarkForm, ChangePhotoForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+from django.http import JsonResponse
 
 
 # Create your views here.

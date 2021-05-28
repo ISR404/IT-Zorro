@@ -17,7 +17,7 @@
                     {% if request.user.is_authenticated and request.user.id not in bookmark_user_ids%}
                     <form action="{% url 'studentfood:favourite_add' recipe_detail.id %}" method="post">
                     {% csrf_token %}
-                        <input type="submit" value="Добавить в избранное" name="favourite_click">
+                        <input class="btn btn-info" type="submit" value="Добавить в избранное" name="favourite_click">
                     </form>
 
                 {% endif %}
@@ -55,7 +55,7 @@
                 <form action="" method="post">
                     {% csrf_token %}
                     {{ mark_form.as_p }}
-                    <input type="submit" value="Поставить оценку!">
+                    <input class="btn btn-success" type="submit" value="Поставить оценку!">
                 </form>
                     {% else %}
                     <p>Войдите в систему, чтобы поставить оценку.</p>
@@ -84,7 +84,7 @@
                                     <form action="." method="post">
                                         {% csrf_token %}
                                         {{ comment_form.as_p }}
-                                        <p><input type="submit" value="Отправить"></p>
+                                        <p><input class="btn btn-primary" type="submit" value="Отправить"></p>
                                     </form>
                                 {% endif %}
                     {% endif %}

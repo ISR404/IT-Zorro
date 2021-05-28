@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^password_reset/$', views.change_password, name='password_reset'),
     url(r'^change_photo/$', views.change_photo, name='change_photo'),
     url(r'^remove_recipe/([0-9]{1,3})/$', views.remove_recipe, name='remove_recipe'),
+    
 ]

@@ -32,26 +32,19 @@ class UserRegisterForm(forms.ModelForm):
     username = forms.CharField(label='Логин')
     password = forms.CharField(widget=forms.PasswordInput, label='Пароль')
     password2 = forms.CharField(widget=forms.PasswordInput, label='Повторите пароль')
-    email = forms.EmailField(label='Почта')
 
     class Meta:
         model = User
         fields = [
             'username',
-            'email',
             'password',
             'password2'
         ]
+
+
     def clean_password2(self):
         password = self.cleaned_data.get('password')
         password2 = self.cleaned_data.get('password2')
         if password != password2:
             raise forms.ValidationError("Пароли не совпадают!")
         return password
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        email_qs = User.objects.filter(email=email)
-        if email_qs.exists():
-            raise forms.ValidationError("Почта уже существует")
-        return email

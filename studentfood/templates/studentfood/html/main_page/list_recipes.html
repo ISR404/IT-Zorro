@@ -1,5 +1,5 @@
 {% for recipe in page_obj%}
-    <div class="price-line">
+<div class="price-line">
 
     <div class="product-image">
       <a href="{% url 'studentfood:detail' recipe.id%}"><img src="{{ recipe.photo_url }}" alt="{{ recipe.recipe_name }}"></a>
@@ -29,13 +29,17 @@
           </div>
 
       </div>
-      <div class="product-description"><a href="{% url 'studentfood:detail' recipe.id%}">{{ recipe.description }}</a></div>
+      <div class="product-description"><a href="{% url 'studentfood:detail' recipe.id%}">{{ recipe.description|truncatechars:200 }}</a></div>
       <div class="price-box"><span>Цена: {{ recipe.price }} рублей</span></div>
-    </div>
-    <form action="{% url 'studentfood:remove_recipe' recipe.id %}" method="post">
-        {% csrf_token %}
-        <input type="submit" name="reset_button" value="Удалить">
-    </form>
+
+      <div>
+        <form action="{% url 'studentfood:remove_recipe' recipe.id %}" method="post">
+            {% csrf_token %}
+            <input class="btn btn-outline-danger" type="submit" name="reset_button" value="Удалить">
+        </form>
+      </div>
 
     </div>
+
+</div>
 {% endfor %}
